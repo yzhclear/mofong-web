@@ -1,26 +1,47 @@
 <template>
   <div class="editor" id="editor-layout-main">
     <a-layout>
-      <a-layout-slider width="300" style="background: yellow">
-        <div class="sidebar-container">组件列表</div>
-      </a-layout-slider>
+      <a-layout-sider width="300" style="background: yellow">
+        <div class="sidebar-container"><component-list :list="defaultTextTemplates" @onItemClick="addItem" /></div>
+      </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content>
           <p>画布区域</p>
-          <div class="preview-list" id="canvas-area"></div>
+          <div class="preview-list" id="canvas-area">
+            <component v-for="component in components" :key="component.id" :is="component.name" v-bind="component.props" />
+          </div>
         </a-layout-content>
       </a-layout>
+      <a-layout-sider width="300" style="background: purple"> 组件属性 </a-layout-sider>
     </a-layout>
-    <a-layout-slider width="300" style="background: purple"> 组件属性 </a-layout-slider>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
+import MText from '../components/MText.vue';
+import ComponentList from '../components/ComponentList.vue';
+import { GlobalDataProps } from '../store/index';
+import { TextComponentProps } from '../defaultProps';
+import { defaultTextTemplates } from '../defaultTemplates';
 
 export default defineComponent({
-  name: 'Home',
-  props: {},
+  name: 'Editor',
+  components: { MText, ComponentList },
+  setup() {
+    const store = useStore<GlobalDataProps>();
+    const components = computed(() => store.state.editor.components);
+
+    const addItem = (props: Partial<TextComponentProps>) => {
+      store.commit('addComponent', props);
+    };
+    return {
+      components,
+      defaultTextTemplates,
+      addItem,
+    };
+  },
 });
 </script>
 
@@ -32,5 +53,8 @@ export default defineComponent({
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+}
+.preview-list {
+  position: relative;
 }
 </style>

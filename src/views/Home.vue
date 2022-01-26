@@ -14,7 +14,6 @@
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
 import { GlobalDataProps } from '../store/index';
-import { TemplateProps } from '../store/templates';
 import TemplateList from '../components/TemplateList.vue';
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 <template>
   <div class="work-detail-container">
     <a-row type="flex" justify="center" v-if="template">
-      <a-col :span="8" class="cover=img">
+      <a-col :span="8" class="cover-img">
         <img :src="template.coverImg" alt="" />
       </a-col>
       <a-col :span="8">
@@ -16,8 +16,8 @@
           <div ref="container"></div>
         </div>
         <div class="use-button">
-          <a-button type="primary">使用模板</a-button>
-          <a-button>下载图片海报</a-button>
+          <a-button type="primary" size="large" class="large">使用模板</a-button>
+          <a-button size="large">下载图片海报</a-button>
         </div>
       </a-col>
     </a-row>
@@ -45,4 +45,18 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.work-detail-container {
+  width: 1200px;
+  margin: 0 auto;
+}
+.work-detail-container .cover-img {
+  margin-right: 20px;
+}
+.work-detail-container img {
+  height: 617px;
+}
+.work-detail-container .use-button {
+  margin-top: 20px;
+}
+</style>

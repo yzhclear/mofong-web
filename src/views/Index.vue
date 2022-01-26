@@ -39,4 +39,8 @@ export default defineComponent({
 .indexpage-container .header .user-profile {
   float: right;
 }
+
+.indexpage-container .home-layout {
+  padding: 100px 20px;
+}
 </style>

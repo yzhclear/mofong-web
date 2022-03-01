@@ -8,7 +8,7 @@ export interface EditorDataProps {
   currentElement: string;
 }
 
-interface ComponentData {
+export interface ComponentData {
   props: { [key: string]: any };
   id: string;
   name: string; // 业务组件名称
@@ -17,17 +17,17 @@ interface ComponentData {
 const testComponents: ComponentData[] = [
   {
     id: v4(),
-    props: { text: 'hello' },
+    props: { text: 'hello', fontSize: '20px', color: 'red', lineHeight: '1', textAlign: 'left', fontFamily: '' },
     name: 'm-text',
   },
   {
     id: v4(),
-    props: { text: 'heihei' },
+    props: { text: 'heihei', fontSize: '10px', fontWeight: 'bold', color: 'red', lineHeight: '2', textAlign: 'left', fontFamily: '' },
     name: 'm-text',
   },
   {
     id: v4(),
-    props: { text: 'hello1' },
+    props: { text: 'hello1', fontSize: '15px', textAlign: 'left', fontFamily: '' },
     name: 'm-text',
   },
   {
@@ -50,6 +50,20 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
         props,
       };
       state.components.push(newComponent);
+    },
+    setActive: (state, payload: string) => {
+      state.currentElement = payload;
+    },
+    updateComponentProps: (state, { key, value }) => {
+      const needUpdateComponent = state.components.find((item) => item.id === state.currentElement);
+      if (needUpdateComponent) {
+        needUpdateComponent.props[key] = value;
+      }
+    },
+  },
+  getters: {
+    getCurrentComponent: (state) => {
+      return state.components.find((item) => item.id === state.currentElement);
     },
   },
 };

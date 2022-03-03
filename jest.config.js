@@ -3,4 +3,8 @@ module.exports = {
   transform: {
     '^.+\\.vue$': 'vue-jest',
   },
+  transformIgnorePatterns: [
+    // all exceptions must be first line
+    '/node_modules/(?!lodash-es)',
+  ],
 };

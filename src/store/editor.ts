@@ -14,10 +14,10 @@ export interface ComponentData {
   name: string; // 业务组件名称
 }
 
-const testComponents: ComponentData[] = [
+export const testComponents: ComponentData[] = [
   {
     id: v4(),
-    props: { text: 'hello', fontSize: '20px', color: 'red', lineHeight: '1', textAlign: 'left', fontFamily: '' },
+    props: { text: 'hello', fontSize: '20px', color: '#000000', lineHeight: '1', textAlign: 'left', fontFamily: '' },
     name: 'm-text',
   },
   {

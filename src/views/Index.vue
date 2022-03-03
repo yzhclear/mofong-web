@@ -4,7 +4,7 @@
       <a-layout-header class="header">
         <div class="page-title">魔方</div>
         <div class="user-profile">
-          <user-profile />
+          <user-profile :user="user" />
         </div>
       </a-layout-header>
       <a-layout-content class="home-layout">
@@ -16,13 +16,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 import UserProfile from '../components/UserProfile.vue';
 
 export default defineComponent({
   name: 'Index',
   components: {
     UserProfile,
+  },
+  setup() {
+    const store = useStore();
+    const user = computed(() => store.state.user);
+
+    return {
+      user,
+    };
   },
 });
 </script>

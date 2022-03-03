@@ -39,6 +39,10 @@ export const mapPropsToForms: PropsToForms = {
     extraProps: { rows: 3 },
     afterTransform: (e: any) => e.target.value,
   },
+  color: {
+    text: '字体颜色',
+    component: 'color-picker',
+  },
   fontSize: {
     text: '字号',
     component: 'a-input-number',

@@ -13,34 +13,35 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { message } from 'ant-design-vue';
-import { GlobalDataProps } from '../store/index';
+import { UserProps } from '@/store/user';
 
 export default defineComponent({
   name: 'UserProfile',
   props: {
-    msg: String,
+    user: {
+      type: Object as PropType<UserProps>,
+      required: true,
+    },
   },
   setup() {
-    const store = useStore<GlobalDataProps>();
+    const store = useStore();
     const router = useRouter();
-    const user = computed(() => store.state.user);
     const handleClickLogin = () => {
       store.commit('login');
       message.success('登录成功', 2);
     };
     const handleClickLogout = () => {
       store.commit('logout');
-      message.success('退出登录成功', 2);
+      message.success('退出登录成功, 2秒后跳到首页', 2);
       setTimeout(() => {
         router.push('/');
-      });
+      }, 2000);
     };
     return {
-      user,
       handleClickLogin,
       handleClickLogout,
     };

@@ -22,6 +22,7 @@ import { computed, defineComponent, PropType } from 'vue';
 import { TextComponentProps } from '../defaultProps';
 import { mapPropsToForms } from '../propsMap';
 import RenderVnode from './RenderVnode';
+import ColorPicker from './ColorPicker.vue';
 
 interface FormProps {
   component: string; // 渲染的组件名称
@@ -33,12 +34,12 @@ interface FormProps {
   initialTransform?: (v: any) => any;
   valueProp: string;
   eventName: string;
-  events: { [key: string]: (e: any) => void };
+  events: { [key: string]: (e: any) => void }; // 组件绑定的事件
 }
 
 export default defineComponent({
   name: 'props-table',
-  components: { RenderVnode },
+  components: { RenderVnode, ColorPicker },
   props: {
     props: {
       type: Object as PropType<TextComponentProps>,

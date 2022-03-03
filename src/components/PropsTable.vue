@@ -1,6 +1,6 @@
 <template>
   <div class="props-table">
-    <div v-for="(value, key) in finalProps" :key="key" class="props-item">
+    <div v-for="(value, key) in finalProps" :key="key" class="prop-item" :class="{ 'no-text': !value.text }">
       <span class="label" v-if="value.text">{{ value.text }}</span>
       <div class="prop-component">
         <component :is="value.component" :[value.valueProp]="value.value" v-bind="value.extraProps" v-on="value.events">
@@ -23,6 +23,7 @@ import { TextComponentProps } from '../defaultProps';
 import { mapPropsToForms } from '../propsMap';
 import RenderVnode from './RenderVnode';
 import ColorPicker from './ColorPicker.vue';
+import IconSwitch from './IconSwitch.vue';
 
 interface FormProps {
   component: string; // 渲染的组件名称
@@ -39,7 +40,7 @@ interface FormProps {
 
 export default defineComponent({
   name: 'props-table',
-  components: { RenderVnode, ColorPicker },
+  components: { RenderVnode, ColorPicker, IconSwitch },
   props: {
     props: {
       type: Object as PropType<TextComponentProps>,
@@ -78,7 +79,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.props-item {
+.prop-item {
   display: flex;
   margin-bottom: 10px;
   align-items: center;
@@ -88,5 +89,9 @@ export default defineComponent({
 }
 .prop-component {
   width: 70%;
+}
+.prop-item.no-text {
+  display: inline-block;
+  margin: 0 10px 0 0;
 }
 </style>

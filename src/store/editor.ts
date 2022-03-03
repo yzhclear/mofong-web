@@ -17,7 +17,7 @@ export interface ComponentData {
 export const testComponents: ComponentData[] = [
   {
     id: v4(),
-    props: { text: 'hello', fontSize: '20px', color: '#000000', lineHeight: '1', textAlign: 'left', fontFamily: '' },
+    props: { text: 'hello', fontSize: '20px', color: '#000000', lineHeight: '1', textAlign: 'left', fontFamily: '', fontWeight: '', fontStyle: '', textDecoration: '' },
     name: 'm-text',
   },
   {

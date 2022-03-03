@@ -1,6 +1,12 @@
 import { TextComponentProps } from './defaultProps';
 import { VNode, h } from 'vue';
 
+// 1 component 确定对应是哪个 component
+// 2 更改 value 的 事件名称
+// 3 intialTransform 初始值的变换，有些初始值需要处理以后再传递给组件
+// 4 afterTransform 触发更改以后，不同类型需要不同处理，因为 e 的值是不同的，或者需要回灌的值不同
+// 5 text 属性对应的中文名称
+// 6 给组件赋值的时候 属性的名称，一般是 value，也有可能是另外的，比如 checkbox 就是 checked
 export interface PropToForm {
   component: string; // 渲染的组件名称
   subComponent?: string; // 渲染组件的子组件
@@ -72,5 +78,26 @@ export const mapPropsToForms: PropsToForms = {
     component: 'a-select',
     subComponent: 'a-select-option',
     options: [{ text: '无', value: '' }, ...fontFamilyOptions],
+  },
+  fontWeight: {
+    component: 'icon-switch',
+    initialTransform: (v: string) => v === 'bold',
+    afterTransform: (e: boolean) => (e ? 'bold' : 'normal'),
+    valueProp: 'checked',
+    extraProps: { iconName: 'BoldOutlined', tip: '加粗' },
+  },
+  fontStyle: {
+    component: 'icon-switch',
+    initialTransform: (v: string) => v === 'italic',
+    afterTransform: (e: boolean) => (e ? 'italic' : 'normal'),
+    valueProp: 'checked',
+    extraProps: { iconName: 'ItalicOutlined', tip: '斜体' },
+  },
+  textDecoration: {
+    component: 'icon-switch',
+    initialTransform: (v: string) => v === 'underline',
+    afterTransform: (e: boolean) => (e ? 'underline' : 'none'),
+    valueProp: 'checked',
+    extraProps: { iconName: 'UnderlineOutlined', tip: '下划线' },
   },
 };

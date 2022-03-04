@@ -1,5 +1,6 @@
 <template>
   <div class="indexpage-container">
+    <uploader action="https://jsonplaceholder.typicode.com/posts" />
     <a-layout :style="{ background: '#fff' }">
       <a-layout-header class="header">
         <div class="page-title">魔方</div>
@@ -19,11 +20,13 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 import UserProfile from '../components/UserProfile.vue';
+import Uploader from '@/components/Uploader.vue';
 
 export default defineComponent({
   name: 'Index',
   components: {
     UserProfile,
+    Uploader,
   },
   setup() {
     const store = useStore();

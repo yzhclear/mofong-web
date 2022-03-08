@@ -1,6 +1,6 @@
 <template>
   <div class="indexpage-container">
-    <uploader action="https://jsonplaceholder.typicode.com/posts" />
+    <uploader action="https://jsonplaceholder.typicode.com/posts" drag />
     <a-layout :style="{ background: '#fff' }">
       <a-layout-header class="header">
         <div class="page-title">魔方</div>

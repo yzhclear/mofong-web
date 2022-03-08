@@ -1,7 +1,6 @@
 import { Module } from 'vuex';
 import { v4 } from 'uuid';
 import { GlobalDataProps } from './index';
-import { TextComponentProps } from '../defaultProps';
 
 export interface EditorDataProps {
   components: ComponentData[];
@@ -43,13 +42,8 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     currentElement: '',
   },
   mutations: {
-    addComponent: (state, props: Partial<TextComponentProps>) => {
-      const newComponent: ComponentData = {
-        id: v4(),
-        name: 'm-text',
-        props,
-      };
-      state.components.push(newComponent);
+    addComponent: (state, component: ComponentData) => {
+      state.components.push(component);
     },
     setActive: (state, payload: string) => {
       state.currentElement = payload;

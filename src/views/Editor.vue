@@ -2,7 +2,9 @@
   <div class="editor" id="editor-layout-main">
     <a-layout>
       <a-layout-sider width="300" style="background: yellow">
-        <div class="sidebar-container"><component-list :list="defaultTextTemplates" @onItemClick="addItem" /></div>
+        <div class="sidebar-container">
+          <component-list :list="defaultTextTemplates" @onItemClick="addItem" />
+        </div>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content>
@@ -31,23 +33,23 @@
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
 import MText from '../components/MText.vue';
+import MImage from '../components/MImage.vue';
 import ComponentList from '../components/ComponentList.vue';
 import EditorWrapper from '../components/EditorWrapper.vue';
 import PropsTable from '../components/PropsTable.vue';
 import { GlobalDataProps } from '../store/index';
-import { TextComponentProps } from '../defaultProps';
 import { defaultTextTemplates } from '../defaultTemplates';
 import { ComponentData } from '../store/editor';
 
 export default defineComponent({
   name: 'editor',
-  components: { MText, ComponentList, EditorWrapper, PropsTable },
+  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable },
   setup() {
     const store = useStore<GlobalDataProps>();
     const components = computed(() => store.state.editor.components);
 
-    const addItem = (props: Partial<TextComponentProps>) => {
-      store.commit('addComponent', props);
+    const addItem = (component: any) => {
+      store.commit('addComponent', component);
     };
     const setActive = (id: string) => {
       store.commit('setActive', id);

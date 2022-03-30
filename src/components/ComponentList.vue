@@ -49,10 +49,9 @@ export default defineComponent({
       message.success('图片上传成功');
       componentData.props.imgSrc = resp.url;
       getImageDimensions(resp.url).then(({ width }) => {
-        const maxWidth = 373;
+        const maxWidth = 300;
         componentData.props.width = (width < maxWidth ? width : maxWidth) + 'px';
         context.emit('on-item-click', componentData);
-        console.log(width, componentData.props.width, '=====');
       });
     };
 

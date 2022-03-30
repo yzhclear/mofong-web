@@ -24,6 +24,7 @@ import { mapPropsToForms } from '../propsMap';
 import RenderVnode from './RenderVnode';
 import ColorPicker from './ColorPicker.vue';
 import IconSwitch from './IconSwitch.vue';
+import ImageProcesser from './ImageProcess.vue';
 
 interface FormProps {
   component: string; // 渲染的组件名称
@@ -40,10 +41,10 @@ interface FormProps {
 
 export default defineComponent({
   name: 'props-table',
-  components: { RenderVnode, ColorPicker, IconSwitch },
+  components: { RenderVnode, ColorPicker, IconSwitch, ImageProcesser },
   props: {
     props: {
-      type: Object as PropType<TextComponentProps>,
+      type: Object,
       required: true,
     },
   },
@@ -53,7 +54,7 @@ export default defineComponent({
       return reduce(
         props.props,
         (result, value, key) => {
-          const newKey = key as keyof TextComponentProps;
+          const newKey = key;
           const item = mapPropsToForms[newKey];
           if (item) {
             const { valueProp = 'value', eventName = 'change', initialTransform, afterTransform } = item;
@@ -71,6 +72,7 @@ export default defineComponent({
         {} as { [key: string]: FormProps },
       );
     });
+
     return {
       finalProps,
     };

@@ -90,7 +90,7 @@ export const imageDefaultProps: ImageComponentProps = {
 };
 
 export const textStyleProps = without(Object.keys(textDefaultProps), 'text', 'actionType', 'url');
-export const imageStyleProps = without(Object.keys(imageDefaultProps), 'text', 'actionType', 'url');
+export const imageStyleProps = without(Object.keys(imageDefaultProps), 'src');
 
 export const transformToComponentProps = (props: { [key: string]: any }) => {
   return mapValues(props, (item) => {

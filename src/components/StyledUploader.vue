@@ -2,10 +2,9 @@
   <div class="styled-upload-component">
     <uploader
       class="styled-uploader"
-      action="https://jsonplaceholder.typicode.com/posts"
-      :showUploadList="false"
+      action="http://localhost:3000/api/utils/upload-img"
       :beforeUpload="commonUploadCheck"
-      @success="
+      @file-uploaded="
         (data) => {
           handleUploadSuccess(data);
         }
@@ -45,7 +44,7 @@ export default defineComponent({
   props: {
     text: {
       type: String,
-      default: '上传背景图片',
+      default: '上传图片',
     },
     uploaded: {
       type: Object,
@@ -54,8 +53,8 @@ export default defineComponent({
   emits: ['success'],
   setup(props, context) {
     const handleUploadSuccess = (data: any) => {
-      console.log(data);
-      context.emit('success', { url: 'https://www.surely.cool/surely-vue-logo.png' });
+      context.emit('success', { url: 'http://mofong.oss-cn-hangzhou.aliyuncs.com/upload-files/file-404525' });
+      // context.emit('success', { url: data.urls[0] });
     };
     return {
       commonUploadCheck,
@@ -67,26 +66,24 @@ export default defineComponent({
 
 <style scoped>
 .uploader-container {
-  text-align: center;
   padding: 10px;
-  width: 100%;
-  border: 2px dotted #efefef;
-  color: #ccc;
-  height: 100%;
+  color: #fff;
+  background: #1890ff;
   display: flex;
-  align-items: center;
-  flex-direction: column;
   justify-content: center;
-  transition: all 0.25s ease-in-out;
+  align-items: center;
+  border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .uploader-container:hover {
   border: 2px dotted #1890ff;
   color: #1890ff;
 }
 .uploader-container h4 {
-  color: #999;
-  transition: all 0.25s ease-in-out;
+  color: #fff;
+  margin-bottom: 0;
+  margin-left: 10px;
 }
 .uploader-container:hover h4 {
   color: #1890ff;

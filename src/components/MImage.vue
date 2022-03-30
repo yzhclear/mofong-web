@@ -1,5 +1,5 @@
 <template>
-  <img :src="imgSrc" :style="styleProps" @click="handleClick" />
+  <img class="m-image-component" :src="imgSrc" :style="styleProps" @click="handleClick" />
 </template>
 
 <script lang="ts">
@@ -14,7 +14,6 @@ export default defineComponent({
     ...defaultProps,
   },
   setup(props) {
-    console.log(props, '--------');
     const { styleProps, handleClick } = useComponentCommon(props, imageStyleProps);
     return {
       styleProps,
@@ -23,3 +22,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.m-image-component {
+  position: relative !important;
+}
+</style>

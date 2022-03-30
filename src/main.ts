@@ -5,6 +5,7 @@ import router from './routes';
 import store from './store';
 
 import 'ant-design-vue/dist/antd.css';
+import 'cropperjs/dist/cropper.css';
 
 const app = createApp(App);
 app.use(Antd).use(router).use(store);

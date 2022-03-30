@@ -7,7 +7,7 @@ import { VNode, h } from 'vue';
 // 4 afterTransform 触发更改以后，不同类型需要不同处理，因为 e 的值是不同的，或者需要回灌的值不同
 // 5 text 属性对应的中文名称
 // 6 给组件赋值的时候 属性的名称，一般是 value，也有可能是另外的，比如 checkbox 就是 checked
-export interface PropToForm {
+export interface PropDetailType {
   component: string; // 渲染的组件名称
   subComponent?: string; // 渲染组件的子组件
   extraProps?: { [key: string]: any }; // 一些组件的配置项属性
@@ -19,8 +19,16 @@ export interface PropToForm {
   eventName?: string;
 }
 
-export type PropsToForms = {
-  [P in keyof TextComponentProps]?: PropToForm;
+export type MapTypes = {
+  [key: string]: PropDetailType;
+};
+
+const defaultMap = {
+  component: 'a-input',
+  eventName: 'change',
+  valueProp: 'value',
+  intialTransform: (v: any) => v,
+  afterTransform: (e: any) => e,
 };
 
 const fontFamily = [
@@ -38,7 +46,7 @@ const fontFamilyOptions = fontFamily.map((font) => {
   };
 });
 
-export const mapPropsToForms: PropsToForms = {
+export const mapPropsToForms: MapTypes = {
   text: {
     text: '文本',
     component: 'a-textarea',
@@ -99,5 +107,9 @@ export const mapPropsToForms: PropsToForms = {
     afterTransform: (e: boolean) => (e ? 'underline' : 'none'),
     valueProp: 'checked',
     extraProps: { iconName: 'UnderlineOutlined', tip: '下划线' },
+  },
+  imgSrc: {
+    ...defaultMap,
+    component: 'image-processer',
   },
 };

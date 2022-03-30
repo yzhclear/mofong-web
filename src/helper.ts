@@ -5,6 +5,14 @@ interface CheckCondition {
   size: number;
 }
 
+export interface UploadImgProps {
+  data: {
+    urls: string[];
+  };
+  errno: number;
+  file: File;
+}
+
 type ErrorType = 'format' | 'size' | null;
 
 const beforeUploadCheck = (file: File, condition: CheckCondition) => {

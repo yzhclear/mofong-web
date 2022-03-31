@@ -25,6 +25,8 @@ import RenderVnode from './RenderVnode';
 import ColorPicker from './ColorPicker.vue';
 import IconSwitch from './IconSwitch.vue';
 import ImageProcesser from './ImageProcess.vue';
+import ShadowPicker from './ShadowPicker.vue';
+import BackgroundProcesser from './BackgroundImageProcess.vue';
 
 interface FormProps {
   component: string; // 渲染的组件名称
@@ -41,7 +43,7 @@ interface FormProps {
 
 export default defineComponent({
   name: 'props-table',
-  components: { RenderVnode, ColorPicker, IconSwitch, ImageProcesser },
+  components: { RenderVnode, ColorPicker, IconSwitch, ImageProcesser, ShadowPicker, BackgroundProcesser },
   props: {
     props: {
       type: Object,

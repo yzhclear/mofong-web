@@ -78,7 +78,6 @@ export default defineComponent({
             checkCrossOrigin: false,
             crop(event) {
               const { x, y, width, height } = event.detail;
-              console.log(width, height);
               cropperData = {
                 x: Math.floor(x),
                 y: Math.floor(y),

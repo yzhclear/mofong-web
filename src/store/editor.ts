@@ -30,28 +30,42 @@ export interface PageData {
 export const testComponents: ComponentData[] = [
   {
     id: v4(),
-    props: { ...textDefaultProps, text: 'hello', fontSize: '20px', color: '#000000', lineHeight: '1', textAlign: 'left', fontFamily: '', fontWeight: '', fontStyle: '', textDecoration: '' },
+    props: {
+      ...textDefaultProps,
+      text: 'hello',
+      width: '100px',
+      height: '100px',
+      fontSize: '20px',
+      color: '#000000',
+      lineHeight: '1',
+      textAlign: 'left',
+      fontFamily: '',
+      fontWeight: '',
+      fontStyle: '',
+      textDecoration: '',
+      backgroundColor: '#eee',
+    },
     name: 'm-text',
     layerName: '图层一',
   },
-  {
-    id: v4(),
-    props: { ...textDefaultProps, text: 'heihei', fontSize: '10px', fontWeight: 'bold', color: 'red', lineHeight: '2', textAlign: 'left', fontFamily: '' },
-    name: 'm-text',
-    layerName: '图层二',
-  },
-  {
-    id: v4(),
-    props: { ...textDefaultProps, text: 'hello1', fontSize: '15px', textAlign: 'left', fontFamily: '' },
-    name: 'm-text',
-    layerName: '图层三',
-  },
-  {
-    id: v4(),
-    props: { ...textDefaultProps, text: 'hello2', actionType: 'url', url: 'https://www.baidu.com' },
-    name: 'm-text',
-    layerName: '图层四',
-  },
+  // {
+  //   id: v4(),
+  //   props: { ...textDefaultProps, text: 'heihei', fontSize: '10px', fontWeight: 'bold', color: 'red', lineHeight: '2', textAlign: 'left', fontFamily: '' },
+  //   name: 'm-text',
+  //   layerName: '图层二',
+  // },
+  // {
+  //   id: v4(),
+  //   props: { ...textDefaultProps, text: 'hello1', fontSize: '15px', textAlign: 'left', fontFamily: '' },
+  //   name: 'm-text',
+  //   layerName: '图层三',
+  // },
+  // {
+  //   id: v4(),
+  //   props: { ...textDefaultProps, text: 'hello2', actionType: 'url', url: 'https://www.baidu.com' },
+  //   name: 'm-text',
+  //   layerName: '图层四',
+  // },
   // {
   //   id: v4(),
   //   props: { ...imageDefaultProps, imgSrc: 'http://mofong.oss-cn-hangzhou.aliyuncs.com/upload-files/file-404525' },
@@ -70,7 +84,7 @@ interface PageProps {
 
 const pageDefaultProps = {
   backgroundColor: '#fff',
-  backgroundImage: 'url("http://mofong.oss-cn-hangzhou.aliyuncs.com/upload-files/file-404525")',
+  backgroundImage: '',
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   height: '560px',

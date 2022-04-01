@@ -29,6 +29,8 @@ export default defineComponent({
 </script>
 <style scoped>
 .m-text-component {
-  position: relative !important;
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>

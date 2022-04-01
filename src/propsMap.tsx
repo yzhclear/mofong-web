@@ -31,14 +31,14 @@ const defaultMap = {
   component: 'a-input',
   eventName: 'change',
   valueProp: 'value',
-  intialTransform: (v: any) => v,
+  initialTransform: (v: any) => v,
   afterTransform: (e: any) => e,
 };
 
 const numberToPxHandle = {
   ...defaultMap,
   component: 'a-input-number',
-  intialTransform: (v: string) => (v ? parseInt(v) : 0),
+  initialTransform: (v: string) => (v ? parseInt(v) : 0),
   afterTransform: (e: number) => (e ? `${e}px` : '0'),
 };
 

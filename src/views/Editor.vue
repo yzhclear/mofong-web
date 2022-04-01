@@ -15,7 +15,9 @@
                 v-for="component in components"
                 :key="component.id"
                 :id="component.id"
+                :props="component.props"
                 @onSetActive="setActive(component.id)"
+                @update-positon="handleUpdatePosition"
                 :active="component.id === (currentComponent && currentComponent.id)"
               >
                 <component :is="component.name" v-bind="component.props" />
@@ -55,6 +57,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { pickBy, forEach } from 'lodash-es';
 import MText from '../components/MText.vue';
 import MImage from '../components/MImage.vue';
 import ComponentList from '../components/ComponentList.vue';
@@ -89,17 +92,25 @@ export default defineComponent({
     const handlePageChange = (e: any) => {
       store.commit('updatePage', e);
     };
+    const handleUpdatePosition = (e: any) => {
+      const { id } = e;
+      const updateProps = pickBy(e, (v, k) => k !== 'id');
+      forEach(updateProps, (v, key) => {
+        store.commit('updateComponentProps', { key, value: v + 'px', id });
+      });
+    };
     const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
     return {
       page,
       components,
       defaultTextTemplates,
       activePanel,
+      currentComponent,
       addItem,
       setActive,
-      currentComponent,
       handleChange,
       handlePageChange,
+      handleUpdatePosition,
     };
   },
 });

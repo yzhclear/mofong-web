@@ -1,13 +1,21 @@
 import { Module } from 'vuex';
 import { v4 } from 'uuid';
-import { GlobalDataProps } from './index';
+import { message } from 'ant-design-vue';
+import { cloneDeep } from 'lodash-es';
+import store, { GlobalDataProps } from './index';
 import { textDefaultProps, imageDefaultProps } from '@/defaultProps';
 
-export interface EditorDataProps {
-  components: ComponentData[];
-  currentElement: string;
+type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right';
 
+export interface EditorDataProps {
+  // 供中间编辑器渲染的数组
+  components: ComponentData[];
+  // 当前编辑的元素
+  currentElement: string;
+  // 当前editor页面信息
   page: PageData;
+  // 复制的component
+  copiedComponent?: ComponentData;
 }
 
 export interface ComponentData {
@@ -101,6 +109,7 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
   },
   mutations: {
     addComponent: (state, component: ComponentData) => {
+      component.layerName = '图层' + (state.components.length + 1);
       state.components.push(component);
     },
     setActive: (state, payload: string) => {
@@ -119,6 +128,62 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     },
     updatePage: (state, { key, value }) => {
       state.page.props[key as keyof PageProps] = value;
+    },
+    copyComponent: (state, { id }) => {
+      const currentComponent = state.components.find((item) => item.id === (id || state.currentElement));
+      if (currentComponent) {
+        state.copiedComponent = currentComponent;
+        message.success('已拷贝当前图层', 1);
+      }
+    },
+    pasteCopiedComponent: (state) => {
+      if (state.copiedComponent) {
+        const cloneComponent = cloneDeep(state.copiedComponent);
+        cloneComponent.id = v4();
+        cloneComponent.layerName = cloneComponent.layerName + '复制';
+        state.components.push(cloneComponent);
+        message.success('已粘贴当前图层', 1);
+      }
+    },
+    deleteComponent: (state, { id }) => {
+      const currentComponent = state.components.find((item) => item.id === (id || state.currentElement));
+      if (currentComponent) {
+        state.components = state.components.filter((component) => component.id !== (id || state.currentElement));
+        message.success('已删除当前图层', 1);
+      }
+    },
+    moveComponent: (state, data: { direction: MoveDirection; amount: number; id: string }) => {
+      const { id } = data;
+      const currentComponent = state.components.find((item) => item.id === (id || state.currentElement));
+      if (currentComponent) {
+        const oldTop = parseInt(currentComponent.props.top || '0');
+        const oldLeft = parseInt(currentComponent.props.left || '0');
+        const { direction, amount } = data;
+        switch (direction) {
+          case 'Up': {
+            const newVal = oldTop - amount + 'px';
+            store.commit('updateComponentProps', { key: 'top', value: newVal, id: id });
+            break;
+          }
+          case 'Down': {
+            const newVal = oldTop + amount + 'px';
+            store.commit('updateComponentProps', { key: 'top', value: newVal, id: id });
+            break;
+          }
+          case 'Left': {
+            const newVal = oldLeft - amount + 'px';
+            store.commit('updateComponentProps', { key: 'left', value: newVal, id: id });
+            break;
+          }
+          case 'Right': {
+            const newVal = oldLeft + amount + 'px';
+            store.commit('updateComponentProps', { key: 'left', value: newVal, id: id });
+            break;
+          }
+          default:
+            break;
+        }
+      }
     },
   },
   getters: {

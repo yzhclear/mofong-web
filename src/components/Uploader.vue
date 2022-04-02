@@ -69,29 +69,29 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('file', files[0]);
         context.emit('file-uploaded', files[0]);
-        return;
+        // return;
 
-        // axios
-        //   .post(props.action, formData, {
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data',
-        //     },
-        //   })
-        //   .then((resp) => {
-        //     fileStatus.value = 'success';
-        //     uploadedData.value = resp.data.data;
-        //     resp.data.file = files[0];
-        //     context.emit('file-uploaded', resp.data.data);
-        //   })
-        //   .catch((error) => {
-        //     fileStatus.value = 'error';
-        //     context.emit('file-uploaded-error', { error });
-        //   })
-        //   .finally(() => {
-        //     if (fileInput.value) {
-        //       fileInput.value.value = '';
-        //     }
-        //   });
+        axios
+          .post(props.action, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((resp) => {
+            fileStatus.value = 'success';
+            uploadedData.value = resp.data.data;
+            resp.data.file = files[0];
+            context.emit('file-uploaded', resp.data.data);
+          })
+          .catch((error) => {
+            fileStatus.value = 'error';
+            context.emit('file-uploaded-error', { error });
+          })
+          .finally(() => {
+            if (fileInput.value) {
+              fileInput.value.value = '';
+            }
+          });
       }
     };
     return {

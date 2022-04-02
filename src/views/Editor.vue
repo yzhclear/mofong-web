@@ -58,6 +58,7 @@
 import { defineComponent, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { pickBy, forEach } from 'lodash-es';
+import initHotKeys from '../plugins/hotKey';
 import MText from '../components/MText.vue';
 import MImage from '../components/MImage.vue';
 import ComponentList from '../components/ComponentList.vue';
@@ -66,7 +67,7 @@ import EditorWrapper from '../components/EditorWrapper.vue';
 import PropsTable from '../components/PropsTable.vue';
 import EditGroup from '../components/EditGroup.vue';
 import { GlobalDataProps } from '../store/index';
-import { defaultTextTemplates } from '../defaultTemplates';
+import defaultTextTemplates from '../defaultTemplates';
 import { ComponentData } from '../store/editor';
 
 export type TabType = 'component' | 'layer' | 'page';
@@ -75,6 +76,7 @@ export default defineComponent({
   name: 'editor',
   components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup },
   setup() {
+    initHotKeys();
     const store = useStore<GlobalDataProps>();
     const activePanel = ref<TabType>('component');
     const components = computed(() => store.state.editor.components);

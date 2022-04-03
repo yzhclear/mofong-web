@@ -7,8 +7,9 @@
         </div>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
-        <a-layout-content>
+        <a-layout-content class="preview-container">
           <p>画布区域</p>
+          <history-area></history-area>
           <div class="preview-list" id="canvas-area">
             <div class="body-container" :style="page.props">
               <editor-wrapper
@@ -59,6 +60,7 @@ import { defineComponent, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { pickBy, forEach } from 'lodash-es';
 import initHotKeys from '../plugins/hotKey';
+import HistoryArea from './HistoryArea.vue';
 import MText from '../components/MText.vue';
 import MImage from '../components/MImage.vue';
 import ComponentList from '../components/ComponentList.vue';
@@ -74,7 +76,7 @@ export type TabType = 'component' | 'layer' | 'page';
 
 export default defineComponent({
   name: 'editor',
-  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup },
+  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea },
   setup() {
     initHotKeys();
     const store = useStore<GlobalDataProps>();
@@ -97,9 +99,9 @@ export default defineComponent({
     const handleUpdatePosition = (e: any) => {
       const { id } = e;
       const updateProps = pickBy(e, (v, k) => k !== 'id');
-      forEach(updateProps, (v, key) => {
-        store.commit('updateComponentProps', { key, value: v + 'px', id });
-      });
+      const keyArr = Object.keys(updateProps);
+      const valueArr = Object.values(updateProps).map((v) => v + 'px');
+      store.commit('updateComponentProps', { key: keyArr, value: valueArr, id });
     };
     const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
     return {
@@ -126,6 +128,15 @@ export default defineComponent({
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+}
+.preview-container {
+  padding: 24px;
+  margin: 0;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 .preview-list {
   padding: 0;

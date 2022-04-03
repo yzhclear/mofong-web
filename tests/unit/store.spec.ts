@@ -4,6 +4,19 @@ import { ComponentData, testComponents } from '@/store/editor';
 import { TextComponentProps, textDefaultProps } from '@/defaultProps';
 import { last, clone } from 'lodash-es';
 const cloneComponents = clone(testComponents);
+
+const getLengthAndAssert = (length: number) => {
+  expect(store.state.editor.components.length).toBe(length);
+};
+const getLastAndAssert = (id: string) => {
+  const lastItem = last(store.state.editor.components);
+  expect(lastItem?.id).toBe(id);
+};
+const getCurrentAndAssert = (text: string) => {
+  const currentComponent: ComponentData = store.getters.getCurrentComponent;
+  expect(currentComponent.props.text).toBe(text);
+};
+
 describe('test vuex store', () => {
   it('should have three modules', () => {
     expect(store.state).toHaveProperty('user');
@@ -31,7 +44,8 @@ describe('test vuex store', () => {
     });
   });
 
-  describe.only('test editor module', () => {
+  // -------- editor test ----------
+  describe('test editor module', () => {
     it('should have default components', () => {
       expect(store.state.editor.components).toHaveLength(cloneComponents.length);
     });
@@ -75,7 +89,7 @@ describe('test vuex store', () => {
       expect(currentElement.layerName).toBe('new layer');
     });
     it('copy & paste component should works fine', () => {
-      store.commit('copyComponent', { id: store.state.editor.currentElement });
+      store.commit('copyComponent', store.state.editor.currentElement);
       expect(store.state.editor.copiedComponent).toBeDefined();
       store.commit('pasteCopiedComponent');
       expect(store.state.editor.components).toHaveLength(cloneComponents.length + 2);
@@ -97,6 +111,62 @@ describe('test vuex store', () => {
       expect(currentElement.props.top).toBe(oldTopValue - 5 + 'px');
       store.commit('moveComponent', { direction: 'Down', amount: 3, id: currentElement.id });
       expect(currentElement.props.top).toBe(oldTopValue - 5 + 3 + 'px');
+    });
+
+    // undo
+    it('undo should works fine', () => {
+      store.commit('resetEditor');
+      const payload: ComponentData = {
+        name: 'm-text',
+        id: '1234',
+        props: {
+          text: 'text1',
+        },
+      };
+      store.commit('addComponent', payload);
+
+      const payload2: ComponentData = {
+        name: 'm-text',
+        id: '2345',
+        props: {
+          text: 'text2',
+        },
+      };
+      store.commit('addComponent', payload2);
+
+      // delete
+      store.commit('deleteComponent', '2345');
+      // update
+      store.commit('updateComponentProps', { key: 'text', value: 'update', id: '1234' });
+
+      store.commit('setActive', '1234');
+      getCurrentAndAssert('update');
+
+      // undo step 1 (update backup)
+      store.commit('undo');
+      getCurrentAndAssert('text1');
+
+      // undo step 2 (delete backup)
+      getLengthAndAssert(1);
+      store.commit('undo');
+      getLengthAndAssert(2);
+      getLastAndAssert('2345');
+
+      // undo step3 (add backup)
+      store.commit('undo');
+      getLengthAndAssert(1);
+      getLastAndAssert('1234');
+
+      store.commit('undo');
+      getLengthAndAssert(0);
+
+      store.commit('redo');
+      getLengthAndAssert(1);
+      getLastAndAssert('1234');
+
+      store.commit('redo');
+      getLengthAndAssert(2);
+      getLastAndAssert('2345');
     });
   });
 });

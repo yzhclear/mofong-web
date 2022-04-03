@@ -15,14 +15,13 @@ export default function initHotKeys() {
   const store = useStore<GlobalDataProps>();
   const currentElement = computed(() => store.state.editor.currentElement);
   useHotkey('ctrl+c, command+c', () => {
-    store.commit('copyComponent', { id: currentElement.value });
+    store.commit('copyComponent', currentElement.value);
   });
   useHotkey('ctrl+v, command+v', () => {
     store.commit('pasteCopiedComponent');
   });
   useHotkey('backspace, delete', () => {
-    console.log(currentElement.value);
-    store.commit('deleteComponent', { id: currentElement.value });
+    store.commit('deleteComponent', currentElement.value);
   });
   useHotkey('esc', () => {
     store.commit('setActive', '');

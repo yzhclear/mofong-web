@@ -62,4 +62,8 @@ export const getImageDimensions = (url: string | File) => {
   });
 };
 
+export const insertArr = (arr: any[], index: number, insertItem: any) => {
+  return [...arr.slice(0, index), insertItem, ...arr.slice(index)];
+};
+
 export { commonUploadCheck };

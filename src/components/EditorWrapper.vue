@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-wrapper" @mousedown="startMove" :style="styles" @click="onItemClick" :class="{ active: active }" ref="editWrapper">
+  <div class="edit-wrapper" @mousedown="startMove" :style="styles" @click="onItemClick" :class="{ active: active }" ref="editWrapper" :data-component-id="id">
     <slot></slot>
     <div class="resizers">
       <div class="resizer top-left" @mousedown.stop="startResize($event, 'top-left')"></div>
@@ -63,37 +63,39 @@ export default defineComponent({
       };
     };
     const startMove = (e: MouseEvent) => {
-      const currentElement = editWrapper.value;
-      if (currentElement) {
-        const { top, left } = currentElement.getBoundingClientRect();
-        gap.x = e.clientX - left;
-        gap.y = e.clientY - top;
-      }
-
-      const handleMouseMove = (event: MouseEvent) => {
-        isMoving = true;
-        const { left, top } = calculateMovePosition(event);
+      if (e.button === 0) {
+        const currentElement = editWrapper.value;
         if (currentElement) {
-          currentElement.style.top = top + 'px';
-          currentElement.style.left = left + 'px';
-        }
-      };
-      const handleMouseUp = (event: MouseEvent) => {
-        // 如果没有移动, 就不发送事件更新位置信息
-        if (isMoving) {
-          const { left, top } = calculateMovePosition(event);
-          context.emit('update-positon', { top, left, id: props.id });
-          document.removeEventListener('mousemove', handleMouseMove);
-          isMoving = false;
+          const { top, left } = currentElement.getBoundingClientRect();
+          gap.x = e.clientX - left;
+          gap.y = e.clientY - top;
         }
 
-        // 清除
-        nextTick(() => {
-          document.removeEventListener('mouseup', handleMouseUp);
-        });
-      };
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+        const handleMouseMove = (event: MouseEvent) => {
+          isMoving = true;
+          const { left, top } = calculateMovePosition(event);
+          if (currentElement) {
+            currentElement.style.top = top + 'px';
+            currentElement.style.left = left + 'px';
+          }
+        };
+        const handleMouseUp = (event: MouseEvent) => {
+          // 如果没有移动, 就不发送事件更新位置信息
+          if (isMoving) {
+            const { left, top } = calculateMovePosition(event);
+            context.emit('update-positon', { top, left, id: props.id });
+            document.removeEventListener('mousemove', handleMouseMove);
+            isMoving = false;
+          }
+
+          // 清除
+          nextTick(() => {
+            document.removeEventListener('mouseup', handleMouseUp);
+          });
+        };
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+      }
     };
 
     // ------ 改变大小 -------

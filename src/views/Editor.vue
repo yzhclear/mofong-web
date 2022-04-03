@@ -10,6 +10,7 @@
         <a-layout-content class="preview-container">
           <p>画布区域</p>
           <history-area></history-area>
+
           <div class="preview-list" id="canvas-area">
             <div class="body-container" :style="page.props">
               <editor-wrapper
@@ -60,6 +61,7 @@ import { defineComponent, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { pickBy, forEach } from 'lodash-es';
 import initHotKeys from '../plugins/hotKey';
+import initContextMenu from '../plugins/contextMenu';
 import HistoryArea from './HistoryArea.vue';
 import MText from '../components/MText.vue';
 import MImage from '../components/MImage.vue';
@@ -78,7 +80,11 @@ export default defineComponent({
   name: 'editor',
   components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea },
   setup() {
+    // 初始化快捷键
     initHotKeys();
+    // 初始化快捷键菜单
+    initContextMenu();
+
     const store = useStore<GlobalDataProps>();
     const activePanel = ref<TabType>('component');
     const components = computed(() => store.state.editor.components);
@@ -104,6 +110,7 @@ export default defineComponent({
       store.commit('updateComponentProps', { key: keyArr, value: valueArr, id });
     };
     const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
+
     return {
       page,
       components,

@@ -5,6 +5,8 @@ import { cloneDeep } from 'lodash-es';
 import store, { GlobalDataProps } from './index';
 import { textDefaultProps, imageDefaultProps } from '@/defaultProps';
 import { insertArr, UploadImgProps } from '../helper';
+import { asyncAndCommit } from './index';
+import { RespWorkData } from './respTypes';
 
 type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right';
 
@@ -14,6 +16,35 @@ export interface HistoryProps {
   type: 'add' | 'delete' | 'modify';
   data: any;
   index?: number;
+}
+
+export interface ComponentData {
+  props: { [key: string]: any };
+  id: string;
+  name: 'm-text' | 'm-image' | 'm-shape'; // 业务组件名称
+  // 图层是否被锁定
+  isLocked?: boolean;
+  // 图层是否被隐藏
+  isHidden?: boolean;
+  // 图层名称
+  layerName?: string;
+}
+
+export interface PageProps {
+  backgroundColor: string;
+  backgroundImage: string;
+  backgroundSize: string;
+  backgroundRepeat: string;
+  height: string;
+}
+
+export interface PageData {
+  id?: string;
+  props?: PageProps;
+  title?: string;
+  desc?: string;
+  coverImg?: string;
+  setting: { [key: string]: any };
 }
 
 export interface EditorDataProps {
@@ -33,23 +64,8 @@ export interface EditorDataProps {
   cachedOldValue: any;
   // 历史记录保存的最大条数
   maxHistoriesNumber: number;
-}
-
-export interface ComponentData {
-  props: { [key: string]: any };
-  id: string;
-  name: 'm-text' | 'm-image' | 'm-shape'; // 业务组件名称
-  // 图层是否被锁定
-  isLocked?: boolean;
-  // 图层是否被隐藏
-  isHidden?: boolean;
-  // 图层名称
-  layerName?: string;
-}
-
-export interface PageData {
-  props: { [key: string]: any };
-  titile: string;
+  // 当前数据是否被修改
+  isDirty: boolean;
 }
 
 export const testComponents: ComponentData[] = [
@@ -98,14 +114,6 @@ export const testComponents: ComponentData[] = [
   //   layerName: '图层五',
   // },
 ];
-
-interface PageProps {
-  backgroundColor: string;
-  backgroundImage: string;
-  backgroundSize: string;
-  backgroundRepeat: string;
-  height: string;
-}
 
 const pageDefaultProps = {
   backgroundColor: '#fff',
@@ -182,13 +190,15 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     components: testComponents,
     currentElement: '',
     page: {
-      titile: 'test background',
+      title: '',
       props: pageDefaultProps,
+      setting: {},
     },
     histories: [],
     historyIndex: -1,
     cachedOldValue: null,
     maxHistoriesNumber: 5,
+    isDirty: false,
   },
   mutations: {
     resetEditor: (state) => {
@@ -196,6 +206,7 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
       state.historyIndex = -1;
       state.histories = [];
       state.currentElement = '';
+      state.isDirty = false;
     },
     addComponent: (state, component: ComponentData) => {
       component.layerName = '图层' + (state.components.length + 1);
@@ -208,6 +219,8 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
         type: 'add',
         data: cloneDeep(component),
       });
+
+      state.isDirty = true;
     },
     setActive: (state, payload: string) => {
       state.currentElement = payload;
@@ -234,10 +247,20 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
             needUpdateComponent.props[key] = value;
           }
         }
+
+        state.isDirty = true;
       }
     },
-    updatePage: (state, { key, value }) => {
-      state.page.props[key as keyof PageProps] = value;
+    updatePage: (state, { key, value, isRoot }) => {
+      if (isRoot) {
+        state.page[key as keyof PageData] = value;
+      } else {
+        if (state.page.props) {
+          state.page.props[key as keyof PageProps] = value;
+        }
+      }
+
+      state.isDirty = true;
     },
     copyComponent: (state, id: string) => {
       const currentComponent = state.components.find((item) => item.id === (id || state.currentElement));
@@ -261,6 +284,8 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
           type: 'add',
           data: cloneDeep(cloneComponent),
         });
+
+        state.isDirty = true;
       }
     },
     deleteComponent: (state, id: string) => {
@@ -279,6 +304,8 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
           index: currentIndex,
           data: currentComponent,
         });
+
+        state.isDirty = true;
       }
     },
     moveComponent: (state, data: { direction: MoveDirection; amount: number; id: string }) => {
@@ -359,6 +386,43 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
           break;
       }
       state.historyIndex++;
+    },
+    getWork(state, { data }: RespWorkData) {
+      const { content, ...rest } = data;
+      state.page = { ...state.page, ...rest };
+
+      if (content.props) {
+        state.page.props = content.props;
+      }
+      state.components = content.components;
+    },
+    saveWork(state) {
+      state.isDirty = false;
+    },
+  },
+  actions: {
+    fetchWork({ commit }, id) {
+      return asyncAndCommit(`/works/${id}`, 'getWork', commit);
+    },
+    fetchSaveWork({ state, commit }, payload) {
+      const { id, data } = payload;
+      if (data) {
+        console.log('save work');
+      } else {
+        // save current work
+        const { title, desc, props, coverImg, setting } = state.page;
+        const postData = {
+          title,
+          desc,
+          coverImg,
+          content: {
+            components: state.components,
+            props,
+            setting,
+          },
+        };
+        return asyncAndCommit(`/works/${id}`, 'saveWork', commit, { method: 'patch', data: postData });
+      }
     },
   },
   getters: {

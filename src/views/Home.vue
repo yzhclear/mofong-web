@@ -15,8 +15,6 @@ import { defineComponent, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { GlobalDataProps } from '../store/index';
 import TemplateList from '../components/TemplateList.vue';
-import axios from 'axios';
-import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'Home',
@@ -27,6 +25,7 @@ export default defineComponent({
   setup() {
     const store = useStore<GlobalDataProps>();
     const testData = computed(() => store.state.templates.data);
+
     onMounted(() => {
       store.dispatch('fetchTemplates');
     });

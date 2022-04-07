@@ -17,11 +17,17 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['clicked', 'change'],
+  emits: ['change'],
   setup(props, context) {
     const isEditing = ref(false);
     let cachedOldValue = '';
     const innerValue = ref(props.value);
+    watch(
+      () => props.value,
+      () => {
+        innerValue.value = props.value;
+      },
+    );
     const inputRef = ref<null | HTMLInputElement>(null);
     watch(isEditing, async (newVal) => {
       if (newVal) {

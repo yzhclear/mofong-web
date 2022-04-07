@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Module } from 'vuex';
 import store, { GlobalDataProps } from './index';
-import { RespListData } from './respTypes';
+import { RespData, RespListData } from './respTypes';
 import { asyncAndCommit } from './index';
 
 export interface TemplateProps {

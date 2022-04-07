@@ -35,11 +35,12 @@ const router = createRouter({
       ],
     },
     {
-      path: '/editor',
+      path: '/editor/:id',
       name: 'editor',
       component: Editor,
       meta: {
         requireLogin: true,
+        title: '编辑设计',
       },
     },
     {
@@ -57,6 +58,10 @@ router.beforeEach(async (to, from) => {
   const { user } = store.state;
   const { isLogin, token } = user;
   const { redirectAlreadyLogin, requireLogin, title } = to.meta;
+
+  if (title) {
+    document.title = title as string;
+  }
 
   if (!isLogin) {
     if (token) {

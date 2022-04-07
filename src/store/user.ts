@@ -45,6 +45,9 @@ const user: Module<UserProps, GlobalDataProps> = {
       localStorage.removeItem('token');
       delete axios.defaults.headers.common.Authorization;
     },
+    updateUserInfo(state) {
+      console.log('更改用户信息成功');
+    },
   },
   actions: {
     fetchLogin: ({ commit }, payload) => {
@@ -57,6 +60,13 @@ const user: Module<UserProps, GlobalDataProps> = {
       return dispatch('fetchLogin', payload).then(() => {
         return dispatch('fetchUserInfo');
       });
+    },
+    fetchUpdateUserInfo: ({ commit }) => {
+      const payload = {
+        nickName: '殷志浩1',
+        gender: 2,
+      };
+      return asyncAndCommit('/users/updateUserInfo', 'updateUserInfo', commit, { method: 'PATCH', data: payload });
     },
   },
 };

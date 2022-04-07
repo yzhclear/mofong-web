@@ -1,6 +1,32 @@
 <template>
   <div class="editor" id="editor-layout-main">
     <a-layout>
+      <a-layout-header class="header">
+        <div class="page-title">
+          <router-link to="/">
+            <img alt="Vue logo" src="../assets/logo-simple.png" class="logo-img" />
+          </router-link>
+          <input-edit :value="page.title" @change="titleChange">
+            <h4>{{ page.title }}</h4>
+          </input-edit>
+        </div>
+        <a-menu :selectable="false" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
+          <a-menu-item key="1">
+            <a-button type="primary">预览和设置</a-button>
+          </a-menu-item>
+          <a-menu-item key="2">
+            <a-button type="primary" @click="saveWork">保存</a-button>
+          </a-menu-item>
+          <a-menu-item key="3">
+            <a-button type="primary">发布</a-button>
+          </a-menu-item>
+          <a-menu-item key="4">
+            <user-profile :user="user"></user-profile>
+          </a-menu-item>
+        </a-menu>
+      </a-layout-header>
+    </a-layout>
+    <a-layout>
       <a-layout-sider width="300" style="background: yellow">
         <div class="sidebar-container">
           <component-list :list="defaultTextTemplates" @onItemClick="addItem" />
@@ -57,9 +83,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-import { pickBy, forEach } from 'lodash-es';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
+import { Modal } from 'ant-design-vue';
+import { pickBy } from 'lodash-es';
 import initHotKeys from '../plugins/hotKey';
 import initContextMenu from '../plugins/contextMenu';
 import HistoryArea from './HistoryArea.vue';
@@ -70,6 +98,8 @@ import LayerList from '../components/LayerList.vue';
 import EditorWrapper from '../components/EditorWrapper.vue';
 import PropsTable from '../components/PropsTable.vue';
 import EditGroup from '../components/EditGroup.vue';
+import InputEdit from '../components/InputEdit.vue';
+import UserProfile from '../components/UserProfile.vue';
 import { GlobalDataProps } from '../store/index';
 import defaultTextTemplates from '../defaultTemplates';
 import { ComponentData } from '../store/editor';
@@ -78,7 +108,7 @@ export type TabType = 'component' | 'layer' | 'page';
 
 export default defineComponent({
   name: 'editor',
-  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea },
+  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile },
   setup() {
     // 初始化快捷键
     initHotKeys();
@@ -86,9 +116,55 @@ export default defineComponent({
     initContextMenu();
 
     const store = useStore<GlobalDataProps>();
+    const route = useRoute();
+    const workId = route.params.id;
     const activePanel = ref<TabType>('component');
     const components = computed(() => store.state.editor.components);
+    const isDirty = computed(() => store.state.editor.isDirty);
+    const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
+    const user = computed(() => store.state.user);
     const page = computed(() => store.state.editor.page);
+    let timer: any;
+    onMounted(() => {
+      // 清空 editor 中数据
+      store.commit('resetEditor');
+
+      // 获取 work 数据
+      if (workId) {
+        store.dispatch('fetchWork', workId);
+      }
+
+      // 自动保存
+      timer = setInterval(() => {
+        if (isDirty.value) {
+          saveWork();
+        }
+      }, 1000 * 30);
+    });
+    onUnmounted(() => {
+      clearInterval(timer);
+    });
+
+    onBeforeRouteLeave((to, from, next) => {
+      // 有修改 未保存
+      if (isDirty.value) {
+        Modal.confirm({
+          title: '作品还未保存，是否保存？',
+          okText: '保存',
+          okType: 'primary',
+          cancelText: '不保存',
+          onOk: async () => {
+            await saveWork();
+            next();
+          },
+          onCancel() {
+            next();
+          },
+        });
+      } else {
+        next();
+      }
+    });
 
     const addItem = (component: any) => {
       store.commit('addComponent', component);
@@ -102,6 +178,9 @@ export default defineComponent({
     const handlePageChange = (e: any) => {
       store.commit('updatePage', e);
     };
+    const titleChange = (newTitle: string) => {
+      store.commit('updatePage', { key: 'title', value: newTitle, isRoot: true });
+    };
     const handleUpdatePosition = (e: any) => {
       const { id } = e;
       const updateProps = pickBy(e, (v, k) => k !== 'id');
@@ -109,7 +188,10 @@ export default defineComponent({
       const valueArr = Object.values(updateProps).map((v) => v + 'px');
       store.commit('updateComponentProps', { key: keyArr, value: valueArr, id });
     };
-    const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
+
+    const saveWork = () => {
+      store.dispatch('fetchSaveWork', { id: workId });
+    };
 
     return {
       page,
@@ -117,17 +199,34 @@ export default defineComponent({
       defaultTextTemplates,
       activePanel,
       currentComponent,
+      user,
       addItem,
       setActive,
       handleChange,
       handlePageChange,
       handleUpdatePosition,
+      titleChange,
+      saveWork,
     };
   },
 });
 </script>
 
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.header .logo-img {
+  margin-right: 20px;
+  height: 40px;
+}
+.page-title {
+  display: flex;
+}
+.header h4 {
+  color: #ffffff;
+}
 .content-container {
   background: #fff;
   padding: 0 24px 24px 30px;

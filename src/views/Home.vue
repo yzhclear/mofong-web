@@ -11,10 +11,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { GlobalDataProps } from '../store/index';
 import TemplateList from '../components/TemplateList.vue';
+import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'Home',
@@ -23,10 +25,11 @@ export default defineComponent({
   },
   props: {},
   setup() {
-    const {
-      state: { templates },
-    } = useStore<GlobalDataProps>();
-    const testData = computed(() => templates.data);
+    const store = useStore<GlobalDataProps>();
+    const testData = computed(() => store.state.templates.data);
+    onMounted(() => {
+      store.dispatch('fetchTemplates');
+    });
     return {
       testData,
     };

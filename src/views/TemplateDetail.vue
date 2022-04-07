@@ -29,7 +29,7 @@ import { computed, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { GlobalDataProps } from '../store/index';
-import { TemplateProps } from '../store/templates';
+import { TemplateProps } from '../store/works';
 
 export default defineComponent({
   name: 'TemplateDetail',

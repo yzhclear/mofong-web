@@ -1,6 +1,7 @@
 import createContextMenu, { ActionItem } from '@/components/createContextMenu';
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+
 const initContextMenu = () => {
   const store = useStore();
   // 使用函数方式创建快捷键菜单

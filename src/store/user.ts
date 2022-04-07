@@ -1,19 +1,62 @@
+import axios, { AxiosRequestConfig } from 'axios';
 import { Module } from 'vuex';
-import { GlobalDataProps } from './index';
+import { GlobalDataProps, asyncAndCommit } from './index';
+import { RespData } from './respTypes';
+export interface UserDataProps {
+  username?: string;
+  id?: string;
+  phoneNumber?: string;
+  nickName?: string;
+  description?: string;
+  updatedAt?: string;
+  createdAt?: string;
+  iat?: number;
+  exp?: number;
+  picture?: string;
+  gender?: string;
+}
 
 export interface UserProps {
   isLogin: boolean;
-  userName?: string;
+  data: UserDataProps;
+  token?: string;
 }
 
 const user: Module<UserProps, GlobalDataProps> = {
+  state: {
+    isLogin: false,
+    data: {},
+    token: localStorage.getItem('token') || '',
+  },
   mutations: {
-    login(state) {
+    login(state, rawData: RespData<{ token: string }>) {
+      const { token } = rawData.data;
+      state.token = token;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    },
+    getUserInfo(state, rawData: RespData<UserDataProps>) {
       state.isLogin = true;
-      state.userName = 'yzh';
+      state.data = { ...rawData.data };
     },
     logout(state) {
+      state.token = '';
       state.isLogin = false;
+      localStorage.removeItem('token');
+      delete axios.defaults.headers.common.Authorization;
+    },
+  },
+  actions: {
+    fetchLogin: ({ commit }, payload) => {
+      return asyncAndCommit('/users/loginByPhoneNumber', 'login', commit, { method: 'post', data: payload });
+    },
+    fetchUserInfo: ({ commit }) => {
+      return asyncAndCommit('/users/getUserInfo', 'getUserInfo', commit);
+    },
+    fetchLoginAndGetUserInfo({ dispatch }, payload) {
+      return dispatch('fetchLogin', payload).then(() => {
+        return dispatch('fetchUserInfo');
+      });
     },
   },
 };

@@ -1,6 +1,5 @@
 <template>
   <div class="indexpage-container">
-    <uploader action="https://jsonplaceholder.typicode.com/posts" drag />
     <a-layout :style="{ background: '#fff' }">
       <a-layout-header class="header">
         <div class="page-title">魔方</div>
@@ -11,7 +10,7 @@
       <a-layout-content class="home-layout">
         <router-view></router-view>
       </a-layout-content>
-      <a-layout-footer> ©️ 魔方(mofong.com) 版权所有 | 津ICP备20000929号 </a-layout-footer>
+      <a-layout-footer> ©️ 魔方(mofong.com) 版权所有 | 皖ICP备2022004858号 </a-layout-footer>
     </a-layout>
   </div>
 </template>
@@ -20,13 +19,11 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 import UserProfile from '../components/UserProfile.vue';
-import Uploader from '@/components/Uploader.vue';
 
 export default defineComponent({
   name: 'Index',
   components: {
     UserProfile,
-    Uploader,
   },
   setup() {
     const store = useStore();

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { TemplateProps } from '../store/templates';
+import { TemplateProps } from '../store/works';
 
 export default defineComponent({
   name: 'TemplateList',

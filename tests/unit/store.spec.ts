@@ -1,8 +1,24 @@
 import store from '@/store/index';
-import { testData } from '@/store/templates';
 import { ComponentData, testComponents } from '@/store/editor';
 import { TextComponentProps, textDefaultProps } from '@/defaultProps';
 import { last, clone } from 'lodash-es';
+
+export const testData = [
+  {
+    id: 1,
+    coverImg: 'http://static-dev.imooc-lego.com/imooc-test/sZHlgv.png',
+    title: '前端架构师直播海报',
+    author: 'yzh',
+    copiedCount: 1,
+  },
+  {
+    id: 2,
+    coverImg: 'http://static-dev.imooc-lego.com/imooc-test/sZHlgv.png',
+    title: '前端架构师直播海报',
+    author: 'yzh',
+    copiedCount: 1,
+  },
+];
 const cloneComponents = clone(testComponents);
 
 const getLengthAndAssert = (length: number) => {

@@ -1,5 +1,6 @@
 import { message } from 'ant-design-vue';
-
+import axios from 'axios';
+import html2canvas from 'html2canvas';
 interface CheckCondition {
   format: string[];
   size: number;
@@ -85,5 +86,36 @@ export function clickInsideElement(e: Event, className: string) {
 export function isMobile(mobile: string) {
   return /^1[3-9]\d{9}$/.test(mobile);
 }
+
+export const takeScreenshotAndUpload = (id: string) => {
+  const el = document.getElementById(id) as HTMLElement;
+  return html2canvas(el, { width: 375, useCORS: true, scale: 1 }).then((canvas) => {
+    return new Promise<UploadImgProps>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const newFile = new File([blob], 'screenshot.png');
+          const formData = new FormData();
+          formData.append('file', newFile);
+
+          axios
+            .post('/utils/upload-img', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              timeout: 5000,
+            })
+            .then((res) => {
+              resolve(res.data);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        } else {
+          reject(new Error('blob data error'));
+        }
+      }, 'image/png');
+    });
+  });
+};
 
 export { commonUploadCheck };

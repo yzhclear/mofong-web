@@ -6,7 +6,7 @@ import store, { GlobalDataProps } from './index';
 import { textDefaultProps, imageDefaultProps } from '@/defaultProps';
 import { insertArr, UploadImgProps } from '../helper';
 import { asyncAndCommit } from './index';
-import { RespWorkData } from './respTypes';
+import { RespWorkData, RespListData } from './respTypes';
 
 type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right';
 
@@ -16,6 +16,12 @@ export interface HistoryProps {
   type: 'add' | 'delete' | 'modify';
   data: any;
   index?: number;
+}
+
+export interface ChannelProps {
+  id: number;
+  name: string;
+  workId: number;
 }
 
 export interface ComponentData {
@@ -39,12 +45,27 @@ export interface PageProps {
 }
 
 export interface PageData {
-  id?: string;
   props?: PageProps;
+  setting?: { [key: string]: any };
+  id?: number;
   title?: string;
   desc?: string;
   coverImg?: string;
-  setting: { [key: string]: any };
+  uuid?: string;
+  latestPublishAt?: string;
+  updatedAt?: string;
+  isTemplate?: boolean;
+  isHot?: boolean;
+  isNew?: boolean;
+  author?: string;
+  copiedCount?: number;
+  status?: string;
+  user?: {
+    gender: string;
+    nickName: string;
+    picture: string;
+    userName: string;
+  };
 }
 
 export interface EditorDataProps {
@@ -66,6 +87,8 @@ export interface EditorDataProps {
   maxHistoriesNumber: number;
   // 当前数据是否被修改
   isDirty: boolean;
+  // 当前 work 的渠道
+  channels: ChannelProps[];
 }
 
 export const testComponents: ComponentData[] = [
@@ -199,6 +222,7 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     cachedOldValue: null,
     maxHistoriesNumber: 5,
     isDirty: false,
+    channels: [],
   },
   mutations: {
     resetEditor: (state) => {
@@ -399,6 +423,18 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     saveWork(state) {
       state.isDirty = false;
     },
+    publishWork(state) {
+      console.log('发布作品成功');
+    },
+    getChannels(state, { data }: RespListData<ChannelProps>) {
+      state.channels = data.list;
+    },
+    createChannel(state, { data }) {
+      state.channels = [...state.channels, data];
+    },
+    deleteChannel(state, { extraData }) {
+      state.channels = state.channels.filter((channel) => channel.id !== extraData.id);
+    },
   },
   actions: {
     fetchWork({ commit }, id) {
@@ -423,6 +459,18 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
         };
         return asyncAndCommit(`/works/${id}`, 'saveWork', commit, { method: 'patch', data: postData });
       }
+    },
+    fetchPublishWork({ commit }, id) {
+      return asyncAndCommit(`/works/publish/${id}`, 'publishWork', commit, { method: 'post' });
+    },
+    fetchChannels({ commit }, id) {
+      return asyncAndCommit(`/channel/getWorkChannels/${id}`, 'getChannels', commit);
+    },
+    createChannel({ commit }, payload) {
+      return asyncAndCommit('/channel', 'createChannel', commit, { method: 'post', data: payload });
+    },
+    deleteChannel({ commit }, id) {
+      return asyncAndCommit(`channel/${id}`, 'deleteChannel', commit, { method: 'delete' }, { id });
     },
   },
   getters: {

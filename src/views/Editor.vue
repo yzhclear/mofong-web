@@ -18,7 +18,7 @@
             <a-button type="primary" @click="saveWork">保存</a-button>
           </a-menu-item>
           <a-menu-item key="3">
-            <a-button type="primary">发布</a-button>
+            <a-button type="primary" @click="publishWork" :loading="isPublishing">发布</a-button>
           </a-menu-item>
           <a-menu-item key="4">
             <user-profile :user="user"></user-profile>
@@ -30,6 +30,7 @@
       <a-layout-sider width="300" style="background: yellow">
         <div class="sidebar-container">
           <component-list :list="defaultTextTemplates" @onItemClick="addItem" />
+          <img id="test-img" :style="{ width: '300px' }" />
         </div>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
@@ -37,7 +38,7 @@
           <p>画布区域</p>
           <history-area></history-area>
 
-          <div class="preview-list" id="canvas-area">
+          <div class="preview-list" id="canvas-area" :class="{ 'canvas-fix': canvasFix }">
             <div class="body-container" :style="page.props">
               <editor-wrapper
                 v-for="component in components"
@@ -83,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, computed, ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { Modal } from 'ant-design-vue';
@@ -103,6 +104,7 @@ import UserProfile from '../components/UserProfile.vue';
 import { GlobalDataProps } from '../store/index';
 import defaultTextTemplates from '../defaultTemplates';
 import { ComponentData } from '../store/editor';
+import { takeScreenshotAndUpload } from '@/helper';
 
 export type TabType = 'component' | 'layer' | 'page';
 
@@ -119,11 +121,14 @@ export default defineComponent({
     const route = useRoute();
     const workId = route.params.id;
     const activePanel = ref<TabType>('component');
+    const isSaving = ref(false);
+    const isPublishing = ref(false);
     const components = computed(() => store.state.editor.components);
     const isDirty = computed(() => store.state.editor.isDirty);
     const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
     const user = computed(() => store.state.user);
     const page = computed(() => store.state.editor.page);
+    const channels = computed(() => store.state.editor.channels);
     let timer: any;
     onMounted(() => {
       // 清空 editor 中数据
@@ -189,8 +194,42 @@ export default defineComponent({
       store.commit('updateComponentProps', { key: keyArr, value: valueArr, id });
     };
 
+    // ----- 保存作品 ------
     const saveWork = () => {
       store.dispatch('fetchSaveWork', { id: workId });
+    };
+
+    // ----- 发布作品 ------
+    const canvasFix = ref(false); // 控制样式, 解决 html2canvas 黑框及长图截屏不全问题
+    const publishWork = async () => {
+      isPublishing.value = true;
+      // 截图时隐藏选中框
+      store.commit('setActive', '');
+
+      canvasFix.value = true;
+      await nextTick();
+
+      try {
+        // 截图并上传
+        const resp = await takeScreenshotAndUpload('canvas-area');
+        if (resp) {
+          store.commit('updatePage', { key: 'coverImg', value: resp.data.urls[0], isRoot: true });
+          // 保存
+          await saveWork();
+          // 发布
+          await store.dispatch('publishWork', workId);
+          // 获取渠道
+          await store.dispatch('fetchChannels', workId);
+          if (channels.value.length === 0) {
+            await store.dispatch('createChannel', { workId: parseInt(workId as string), name: '默认' });
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        canvasFix.value = false;
+        isPublishing.value = false;
+      }
     };
 
     return {
@@ -200,6 +239,9 @@ export default defineComponent({
       activePanel,
       currentComponent,
       user,
+      canvasFix,
+      isSaving,
+      isPublishing,
       addItem,
       setActive,
       handleChange,
@@ -207,6 +249,7 @@ export default defineComponent({
       handleUpdatePosition,
       titleChange,
       saveWork,
+      publishWork,
     };
   },
 });
@@ -235,6 +278,10 @@ export default defineComponent({
   margin: 0 auto;
   width: 100%;
 }
+.body-container {
+  width: 100%;
+  height: 100%;
+}
 .preview-container {
   padding: 24px;
   margin: 0;
@@ -256,5 +303,13 @@ export default defineComponent({
   position: fixed;
   margin-top: 50px;
   max-height: 80vh;
+}
+
+.preview-list.canvas-fix .edit-wrapper > * {
+  box-shadow: none !important;
+}
+.preview-list.canvas-fix {
+  position: absolute;
+  max-height: none;
 }
 </style>

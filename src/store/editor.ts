@@ -435,6 +435,9 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     deleteChannel(state, { extraData }) {
       state.channels = state.channels.filter((channel) => channel.id !== extraData.id);
     },
+    publishTemplate(state) {
+      state.page.isTemplate = true;
+    },
   },
   actions: {
     fetchWork({ commit }, id) {
@@ -470,7 +473,11 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
       return asyncAndCommit('/channel', 'createChannel', commit, { method: 'post', data: payload });
     },
     deleteChannel({ commit }, id) {
+      console.log(id);
       return asyncAndCommit(`channel/${id}`, 'deleteChannel', commit, { method: 'delete' }, { id });
+    },
+    publishTemplate({ commit }, id) {
+      return asyncAndCommit(`/works/publish-template/${id}`, 'publishTemplate', commit, { method: 'post' });
     },
   },
   getters: {

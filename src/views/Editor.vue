@@ -1,5 +1,8 @@
 <template>
   <div class="editor" id="editor-layout-main">
+    <a-modal title="发布成功" v-model:visible="showModal" width="700px" :footer="null">
+      <publish-form></publish-form>
+    </a-modal>
     <a-layout>
       <a-layout-header class="header">
         <div class="page-title">
@@ -101,6 +104,7 @@ import PropsTable from '../components/PropsTable.vue';
 import EditGroup from '../components/EditGroup.vue';
 import InputEdit from '../components/InputEdit.vue';
 import UserProfile from '../components/UserProfile.vue';
+import PublishForm from './PublishForm.vue';
 import { GlobalDataProps } from '../store/index';
 import defaultTextTemplates from '../defaultTemplates';
 import { ComponentData } from '../store/editor';
@@ -110,7 +114,7 @@ export type TabType = 'component' | 'layer' | 'page';
 
 export default defineComponent({
   name: 'editor',
-  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile },
+  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile, PublishForm },
   setup() {
     // 初始化快捷键
     initHotKeys();
@@ -201,6 +205,7 @@ export default defineComponent({
 
     // ----- 发布作品 ------
     const canvasFix = ref(false); // 控制样式, 解决 html2canvas 黑框及长图截屏不全问题
+    const showModal = ref(false);
     const publishWork = async () => {
       isPublishing.value = true;
       // 截图时隐藏选中框
@@ -223,6 +228,7 @@ export default defineComponent({
           if (channels.value.length === 0) {
             await store.dispatch('createChannel', { workId: parseInt(workId as string), name: '默认' });
           }
+          showModal.value = true;
         }
       } catch (error) {
         console.error(error);
@@ -242,6 +248,7 @@ export default defineComponent({
       canvasFix,
       isSaving,
       isPublishing,
+      showModal,
       addItem,
       setActive,
       handleChange,

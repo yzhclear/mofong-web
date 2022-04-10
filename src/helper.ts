@@ -1,6 +1,8 @@
 import { message } from 'ant-design-vue';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
+import QRCode from 'qrcode';
+
 interface CheckCondition {
   format: string[];
   size: number;
@@ -116,6 +118,40 @@ export const takeScreenshotAndUpload = (id: string) => {
       }, 'image/png');
     });
   });
+};
+
+export const generateQRCode = (id: string, url: string) => {
+  const ele = document.getElementById(id) as HTMLCanvasElement;
+  return QRCode.toCanvas(ele, url, { width: 100 });
+};
+
+export const copyToClipboard = (text: string) => {
+  if (navigator.clipboard) {
+    try {
+      navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      console.warn('copy failed', error);
+    }
+  } else {
+    const textarea = document.createElement('textarea');
+
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.top = '0';
+    textarea.style.left = '-9999px';
+
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      return document.execCommand('copy');
+    } catch (error) {
+      console.warn('copy failed', error);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
 };
 
 export { commonUploadCheck };

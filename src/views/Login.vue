@@ -7,20 +7,20 @@
             <img alt="Vue logo" src="../assets/logo2.png" class="logo-img" />
           </router-link>
           <h2>这是我用过的最好的编辑工具</h2>
-          <span class="text-white-70">王铁锤, Google</span>
+          <span class="text-white-70">-鲁迅</span>
         </div>
       </a-col>
       <a-col :span="12" class="login-area">
         <a-form :model="form" :rules="rules" ref="loginForm" layout="vertical">
           <h2>欢迎回来</h2>
           <p class="subTitle">使用手机号码和验证码登录到魔方</p>
-          <a-form-item label="手机号码" required name="username">
-            <a-input v-model:value="form.username" placeholder="手机号码">
+          <a-form-item label="手机号码" required name="username" validateFirst="true">
+            <a-input size="large" v-model:value="form.username" placeholder="手机号码">
               <template v-slot:prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
             </a-input>
           </a-form-item>
           <a-form-item label="验证码" required name="password">
-            <a-input v-model:value="form.password" placeholder="四位验证码">
+            <a-input size="large" v-model:value="form.password" placeholder="四位验证码">
               <template v-slot:prefix><LockOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
             </a-input>
           </a-form-item>
@@ -143,6 +143,15 @@ export default defineComponent({
 </script>
 
 <style>
+.login-page .aside,
+.login-area {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+.login-area .ant-btn-lg {
+  border-radius: 20px;
+}
 .logo-area {
   position: absolute;
   top: 30px;
@@ -178,15 +187,9 @@ export default defineComponent({
   display: block;
   font-size: 19px;
 }
-.aside,
-.login-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .login-area h2 {
   color: #333333;
-  font-size: 29px;
+  font-size: 36px;
 }
 .login-area .subTitle {
   color: #666666;
@@ -196,14 +199,22 @@ export default defineComponent({
   display: none;
 }
 .login-area .ant-input-prefix {
+  position: absolute;
+  top: 10px;
   left: auto;
   right: 30px;
+  z-index: 1;
   font-size: 19px;
 }
-.login-area .ant-input {
+.login-area .ant-input-affix-wrapper .ant-input {
   font-size: 17px;
-  padding: 20px 45px 20px 30px;
+  padding: 10px 15px;
   background-color: #ebf2ff;
   border-color: #ebf2ff;
+  border-radius: 20px;
+}
+.login-area .ant-input-affix-wrapper {
+  padding: 0;
+  border-radius: 20px;
 }
 </style>

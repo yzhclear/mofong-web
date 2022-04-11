@@ -3,6 +3,14 @@
     <a-modal title="发布成功" v-model:visible="showModal" width="700px" :footer="null">
       <publish-form></publish-form>
     </a-modal>
+    <preview-form
+      :isSaving="isSaving"
+      :isPublishing="isPublishing"
+      :visible="showPreviewForm"
+      @panel-close="showPreviewForm = false"
+      @trigger-publish="publishWork"
+      @trigger-save="saveWork(true)"
+    ></preview-form>
     <a-layout>
       <a-layout-header class="header">
         <div class="page-title">
@@ -15,7 +23,7 @@
         </div>
         <a-menu :selectable="false" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
           <a-menu-item key="1">
-            <a-button type="primary">预览和设置</a-button>
+            <a-button type="primary" @click="preview">预览和设置</a-button>
           </a-menu-item>
           <a-menu-item key="2">
             <a-button type="primary" @click="saveWork">保存</a-button>
@@ -105,6 +113,7 @@ import EditGroup from '../components/EditGroup.vue';
 import InputEdit from '../components/InputEdit.vue';
 import UserProfile from '../components/UserProfile.vue';
 import PublishForm from './PublishForm.vue';
+import PreviewForm from './PreviewForm.vue';
 import { GlobalDataProps } from '../store/index';
 import defaultTextTemplates from '../defaultTemplates';
 import { ComponentData } from '../store/editor';
@@ -114,7 +123,7 @@ export type TabType = 'component' | 'layer' | 'page';
 
 export default defineComponent({
   name: 'editor',
-  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile, PublishForm },
+  components: { MText, MImage, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile, PublishForm, PreviewForm },
   setup() {
     // 初始化快捷键
     initHotKeys();
@@ -238,6 +247,13 @@ export default defineComponent({
       }
     };
 
+    // 预览图层
+    const showPreviewForm = ref(false);
+    const preview = async () => {
+      await saveWork();
+      showPreviewForm.value = true;
+    };
+
     return {
       page,
       components,
@@ -249,6 +265,7 @@ export default defineComponent({
       isSaving,
       isPublishing,
       showModal,
+      showPreviewForm,
       addItem,
       setActive,
       handleChange,
@@ -257,6 +274,7 @@ export default defineComponent({
       titleChange,
       saveWork,
       publishWork,
+      preview,
     };
   },
 });

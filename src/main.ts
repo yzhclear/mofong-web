@@ -1,16 +1,34 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import Antd from 'ant-design-vue';
+import Antd from './configAntD';
 import router from './routes';
 import store, { ICustomAxiosConfig } from './store';
 import axios from 'axios';
 
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.less';
 import 'cropperjs/dist/cropper.css';
 
-// const baseBackendURL = 'http://182.92.168.192:8081';
-const baseBackendURL = 'http://localhost:3000';
-export const baseH5URL = 'http://localhost:3001';
+let baseBackendURL = '';
+let baseH5URL = '';
+let baseStaticURL = '';
+
+if (process.env.NODE_ENV === 'development' || process.env.VUE_APP_IS_STAGING) {
+  // 这里是本地的请求 URL
+  // staging 也就是测试环境 URL
+  // baseBackendURL = 'http://182.92.168.192:8081'
+  // baseH5URL = 'http://182.92.168.192:8082'
+  // baseStaticURL = 'http://182.92.168.192:8080'
+  baseBackendURL = 'http://localhost:3000';
+  baseH5URL = 'http://localhost:3001';
+} else {
+  // 生产环境 URL
+  baseBackendURL = 'https://api.mofong.cc';
+  baseH5URL = 'https://h5.mofong.cc';
+  baseStaticURL = 'https://statistic-res.mofong.cc';
+}
+
+export { baseBackendURL, baseH5URL, baseStaticURL };
+
 axios.defaults.baseURL = `${baseBackendURL}/api/`;
 
 axios.interceptors.request.use((config) => {

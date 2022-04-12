@@ -3,8 +3,6 @@ import axios from 'axios';
 import { message } from 'ant-design-vue';
 import Home from '../views/Home.vue';
 import Index from '../views/Index.vue';
-import Editor from '../views/Editor.vue';
-import Login from '../views/Login.vue';
 import store from '../store/index';
 import TemplateDetail from '../views/TemplateDetail.vue';
 
@@ -37,7 +35,7 @@ const router = createRouter({
     {
       path: '/editor/:id',
       name: 'editor',
-      component: Editor,
+      component: () => import(/* webpackChunkName: "editor" */ '../views/Editor.vue'),
       meta: {
         requireLogin: true,
         title: '编辑设计',
@@ -46,9 +44,10 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
-      component: Login,
+      component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
       meta: {
         redirectAlreadyLogin: true,
+        title: '欢迎登录到魔方网',
       },
     },
   ],

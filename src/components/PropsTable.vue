@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { VNode } from 'vue';
-import { reduce } from 'lodash';
+import { reduce } from 'lodash-es';
 import { computed, defineComponent, PropType } from 'vue';
 import { TextComponentProps } from '../defaultProps';
 import { mapPropsToForms } from '../propsMap';

@@ -6,7 +6,7 @@
   </a-collapse>
 </template>
 <script lang="ts">
-import { difference } from 'lodash';
+import { difference } from 'lodash-es';
 import { computed, defineComponent, PropType, ref } from 'vue';
 import PropTable from '../components/PropsTable.vue';
 

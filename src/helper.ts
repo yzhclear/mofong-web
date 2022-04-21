@@ -3,6 +3,7 @@ import axios from 'axios';
 import html2canvas from 'html2canvas';
 import QRCode from 'qrcode';
 import { saveAs } from 'file-saver';
+import { map } from 'lodash-es';
 
 interface CheckCondition {
   format: string[];
@@ -16,6 +17,10 @@ export interface UploadImgProps {
   errno: number;
   file: File;
 }
+
+export const objToQueryString = (queryObj: { ['string']: any }) => {
+  return map(queryObj, (value: any, key: string) => `${key}=${value}`).join('&');
+};
 
 type ErrorType = 'format' | 'size' | null;
 

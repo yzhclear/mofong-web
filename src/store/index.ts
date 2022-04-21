@@ -1,6 +1,6 @@
 import { createStore, Commit } from 'vuex';
 import axios, { AxiosRequestConfig } from 'axios';
-import templates, { TemplatesProps } from './works';
+import works, { WorkProp, WorksProp } from './works';
 import user, { UserProps } from './user';
 import editor, { EditorDataProps } from './editor';
 
@@ -13,7 +13,7 @@ export interface GlobalDataProps {
   // 全局状态，loading，error 等
   status: GlobalStatus;
   user: UserProps;
-  templates: TemplatesProps;
+  works: WorksProp;
   editor: EditorDataProps;
 }
 
@@ -37,10 +37,10 @@ const store = createStore<GlobalDataProps>({
     user: {} as UserProps,
     status: { loading: false, error: { status: false, message: '' }, opName: '' },
     editor: {} as EditorDataProps,
-    templates: {} as TemplatesProps,
+    works: {} as WorksProp,
   },
   modules: {
-    templates,
+    works,
     user,
     editor,
   },

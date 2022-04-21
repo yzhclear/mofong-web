@@ -29,7 +29,7 @@ import { computed, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { GlobalDataProps } from '../store/index';
-import { TemplateProps } from '../store/works';
+import { WorkProp } from '../store/works';
 
 export default defineComponent({
   name: 'TemplateDetail',
@@ -37,7 +37,7 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>();
     const route = useRoute();
     const templateId = route.params.id as string;
-    const template = computed<TemplateProps>(() => store.getters.getTemplateById(parseInt(templateId)));
+    const template = computed<WorkProp>(() => store.getters.getTemplateById(parseInt(templateId)));
     return {
       template,
     };

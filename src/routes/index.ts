@@ -16,7 +16,7 @@ const router = createRouter({
       children: [
         {
           path: '/home',
-          name: 'home',
+          name: 'Home',
           component: Home,
           meta: {
             title: '欢迎来到魔方',
@@ -24,7 +24,7 @@ const router = createRouter({
         },
         {
           path: '/template/:id',
-          name: 'template',
+          name: 'Template',
           component: TemplateDetail,
           meta: {
             title: '模板详情',
@@ -34,7 +34,7 @@ const router = createRouter({
     },
     {
       path: '/editor/:id',
-      name: 'editor',
+      name: 'Editor',
       component: () => import(/* webpackChunkName: "editor" */ '../views/Editor.vue'),
       meta: {
         requireLogin: true,

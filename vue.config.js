@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isAnalyzeMode = !!process.env.ANALYZE_MODE;
 
 module.exports = {
-  publicPath: isProduction && !isStaging ? 'https://oss.imooc-lego.com/editor' : '/',
+  publicPath: isProduction && !isStaging ? 'https://oss.imooc-lego.com/editor' : './',
   css: {
     loaderOptions: {
       less: {

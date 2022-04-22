@@ -1,5 +1,5 @@
 <template>
-  <img class="m-image-component" :src="imgSrc" :style="styleProps" @click="handleClick" />
+  <img class="m-image-component" :src="imgSrc" :style="styleProps" @click="handleClick" :draggable="false" />
 </template>
 
 <script lang="ts">
@@ -23,7 +23,7 @@ export default defineComponent({
 });
 </script>
 <style>
-.m-image-component {
+/* .m-image-component {
   position: relative !important;
-}
+} */
 </style>

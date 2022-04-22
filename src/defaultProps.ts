@@ -104,6 +104,7 @@ export const shapeDefaultProps: ShapeComponentProps = {
 
 export const textStyleProps = without(Object.keys(textDefaultProps), 'text', 'actionType', 'url');
 export const imageStyleProps = without(Object.keys(imageDefaultProps), 'src');
+export const shapeStyleProps = without(Object.keys(shapeDefaultProps), 'actionType', 'url');
 
 export type AllComponentProps = TextComponentProps & ImageComponentProps & ShapeComponentProps;
 

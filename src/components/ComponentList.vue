@@ -79,6 +79,8 @@ import { message } from 'ant-design-vue';
 import { defineComponent } from 'vue';
 import { FileImageOutlined, LoadingOutlined, FieldStringOutlined, BuildOutlined } from '@ant-design/icons-vue';
 import MText from './MText.vue';
+import MImage from './MImage.vue';
+import MShape from './MShape.vue';
 import StyledUploader from '../components/StyledUploader.vue';
 import { imageDefaultProps } from '../defaultProps';
 import { v4 as uuidv4 } from 'uuid';
@@ -86,9 +88,8 @@ import { ComponentData } from '@/store/editor';
 import { UploadResp } from '@/extraType';
 import { getImageDimensions, commonUploadCheck } from '@/helper';
 import { textList, imageList, shapeList, generateResetCss, CreateComponentType } from '../defaultTemplates';
-
 export default defineComponent({
-  components: { MText, StyledUploader, FileImageOutlined, LoadingOutlined, FieldStringOutlined, BuildOutlined },
+  components: { MText, MImage, MShape, StyledUploader, FileImageOutlined, LoadingOutlined, FieldStringOutlined, BuildOutlined },
   name: 'component-list',
   props: {
     list: {

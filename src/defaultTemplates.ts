@@ -120,23 +120,21 @@ export const textList: CreateComponentType[] = textPropsList.map((prop) => {
 
 // image list
 const imgSourceList = [
-  'http://static.imooc-lego.com/upload-files/logo-white-735536.png',
-  'http://static.imooc-lego.com/upload-files/logo-black-049885.png',
-  'http://static.imooc-lego.com/upload-files/528w-0ilmEQMomZ8-108048.png',
-  'http://static.imooc-lego.com/upload-files/frame-096161.png',
-  'http://static.imooc-lego.com/upload-files/text-449964.png',
-  'http://static.imooc-lego.com/upload-files/text2-288504.png',
-  'http://static.imooc-lego.com/upload-files/money-664239.png',
-  'http://static.imooc-lego.com/upload-files/bag-904186.png',
-  'http://static.imooc-lego.com/upload-files/text3-086652.png',
-  'http://static.imooc-lego.com/upload-files/text4-145592.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0001.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0002.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0003.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0004.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0005.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0006.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0007.png',
+  'http://static-dev.mofong.cc/upload-files/default-image-template-0008.png',
 ];
 export const imageList: CreateComponentType[] = imgSourceList.map((url) => {
   return {
     name: 'm-image',
     props: {
       ...imageDefaultProps,
-      imageSrc: url,
+      imgSrc: url,
       width: '150px',
     },
   };
@@ -191,7 +189,7 @@ const shapePropsList = [
 ];
 export const shapeList: CreateComponentType[] = shapePropsList.map((prop) => {
   return {
-    name: 'l-shape',
+    name: 'm-shape',
     props: {
       ...shapeDefaultProps,
       ...(prop as any),

@@ -201,10 +201,10 @@ export default defineComponent({
   user-select: none;
   z-index: 1500;
 }
-.edit-wrapper .m-text-component {
+.edit-wrapper .m-text-component,
+.edit-wrapper .m-image-component,
+.edit-wrapper .m-shape-component {
   position: static !important;
-  /* width: 100% !important;
-  height: 100% !important; */
 }
 .edit-wrapper.active .resizers .resizer {
   width: 10px;

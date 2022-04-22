@@ -104,7 +104,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style>
 .file-input {
   display: none;
 }

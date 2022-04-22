@@ -1,5 +1,6 @@
 <template>
   <div class="editor" id="editor-layout-main">
+    <a-spin tip="读取中" class="editor-spinner" v-if="globalStatus.loading"></a-spin>
     <a-modal title="发布成功" v-model:visible="showModal" width="700px" :footer="null">
       <publish-form></publish-form>
     </a-modal>
@@ -38,7 +39,7 @@
       </a-layout-header>
     </a-layout>
     <a-layout>
-      <a-layout-sider width="300" style="background: yellow">
+      <a-layout-sider width="300" style="background: #fff">
         <div class="sidebar-container">
           <component-list :list="defaultTextTemplates" @onItemClick="addItem" />
           <img id="test-img" :style="{ width: '300px' }" />
@@ -136,6 +137,7 @@ export default defineComponent({
     const activePanel = ref<TabType>('component');
     const isSaving = ref(false);
     const isPublishing = ref(false);
+    const globalStatus = computed(() => store.state.status);
     const components = computed(() => store.state.editor.components);
     const isDirty = computed(() => store.state.editor.isDirty);
     const currentComponent = computed<ComponentData | null>(() => store.getters.getCurrentComponent);
@@ -155,7 +157,7 @@ export default defineComponent({
       // 自动保存
       timer = setInterval(() => {
         if (isDirty.value) {
-          saveWork();
+          // saveWork();
         }
       }, 1000 * 30);
     });
@@ -266,6 +268,7 @@ export default defineComponent({
       isPublishing,
       showModal,
       showPreviewForm,
+      globalStatus,
       addItem,
       setActive,
       handleChange,
@@ -280,7 +283,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .header {
   display: flex;
   justify-content: space-between;

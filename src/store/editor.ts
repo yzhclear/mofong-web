@@ -1,5 +1,5 @@
 import { Module } from 'vuex';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { message } from 'ant-design-vue';
 import { cloneDeep } from 'lodash-es';
 import store, { GlobalDataProps } from './index';
@@ -93,7 +93,7 @@ export interface EditorDataProps {
 
 export const testComponents: ComponentData[] = [
   {
-    id: v4(),
+    id: uuidv4(),
     props: {
       ...textDefaultProps,
       text: 'hello',
@@ -113,25 +113,25 @@ export const testComponents: ComponentData[] = [
     layerName: '图层一',
   },
   // {
-  //   id: v4(),
+  //   id: uuidv4(),
   //   props: { ...textDefaultProps, text: 'heihei', fontSize: '10px', fontWeight: 'bold', color: 'red', lineHeight: '2', textAlign: 'left', fontFamily: '' },
   //   name: 'm-text',
   //   layerName: '图层二',
   // },
   // {
-  //   id: v4(),
+  //   id: uuidv4(),
   //   props: { ...textDefaultProps, text: 'hello1', fontSize: '15px', textAlign: 'left', fontFamily: '' },
   //   name: 'm-text',
   //   layerName: '图层三',
   // },
   // {
-  //   id: v4(),
+  //   id: uuidv4(),
   //   props: { ...textDefaultProps, text: 'hello2', actionType: 'url', url: 'https://www.baidu.com' },
   //   name: 'm-text',
   //   layerName: '图层四',
   // },
   // {
-  //   id: v4(),
+  //   id: uuidv4(),
   //   props: { ...imageDefaultProps, imgSrc: 'http://mofong.oss-cn-hangzhou.aliyuncs.com/upload-files/file-404525' },
   //   name: 'm-image',
   //   layerName: '图层五',
@@ -192,7 +192,7 @@ const debounceChange = (callback: (...args: any) => void, timeout = 1000) => {
 
 const pushModifyHistory = (state: EditorDataProps, { key, value, id }: any) => {
   pushHistory(state, {
-    id: v4(),
+    id: uuidv4(),
     type: 'modify',
     componentId: id || state.currentElement,
     data: {
@@ -233,12 +233,13 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
       state.isDirty = false;
     },
     addComponent: (state, component: ComponentData) => {
+      component.id = uuidv4();
       component.layerName = '图层' + (state.components.length + 1);
       state.components.push(component);
 
       // 记录当前操作
       pushHistory(state, {
-        id: v4(),
+        id: uuidv4(),
         componentId: component.id,
         type: 'add',
         data: cloneDeep(component),
@@ -296,14 +297,14 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     pasteCopiedComponent: (state) => {
       if (state.copiedComponent) {
         const cloneComponent = cloneDeep(state.copiedComponent);
-        cloneComponent.id = v4();
+        cloneComponent.id = uuidv4();
         cloneComponent.layerName = cloneComponent.layerName + '复制';
         state.components.push(cloneComponent);
         message.success('已粘贴当前图层', 1);
 
         // 记录当前操作
         pushHistory(state, {
-          id: v4(),
+          id: uuidv4(),
           componentId: cloneComponent.id,
           type: 'add',
           data: cloneDeep(cloneComponent),
@@ -322,7 +323,7 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
         // 记录当前操作
         // data 的 component 需要clone, 因为被删除后就不会再被修改数据了
         pushHistory(state, {
-          id: v4(),
+          id: uuidv4(),
           componentId: currentComponent.id,
           type: 'delete',
           index: currentIndex,

@@ -70,18 +70,26 @@ export interface ImageComponentProps extends CommonComponentProps {
   imgSrc: string;
 }
 
+export interface ShapeComponentProps extends CommonComponentProps {
+  backgroundColor: string;
+}
+
 export const textDefaultProps: TextComponentProps = {
+  ...commonDefaultProps,
   text: '正文内容',
-  fontSize: '15px',
+  fontSize: '14px',
+  width: '125px',
+  height: '36px',
+  left: 320 / 2 - 125 / 2 + 'px',
+  top: 500 / 2 - 36 / 2 + 'px',
   fontFamily: '',
   fontWeight: 'normal',
   fontStyle: 'normal',
   textDecoration: 'none',
   lineHeight: '1',
-  textAlign: 'left',
+  textAlign: 'center',
   color: '#000',
   backgroundColor: '',
-  ...commonDefaultProps,
 };
 
 export const imageDefaultProps: ImageComponentProps = {
@@ -89,8 +97,15 @@ export const imageDefaultProps: ImageComponentProps = {
   ...commonDefaultProps,
 };
 
+export const shapeDefaultProps: ShapeComponentProps = {
+  backgroundColor: '',
+  ...commonDefaultProps,
+};
+
 export const textStyleProps = without(Object.keys(textDefaultProps), 'text', 'actionType', 'url');
 export const imageStyleProps = without(Object.keys(imageDefaultProps), 'src');
+
+export type AllComponentProps = TextComponentProps & ImageComponentProps & ShapeComponentProps;
 
 export const transformToComponentProps = (props: { [key: string]: any }) => {
   return mapValues(props, (item) => {

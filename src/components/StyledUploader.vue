@@ -65,6 +65,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.styled-upload-component {
+  width: 80%;
+  margin: 0 auto;
+}
 .uploader-container {
   padding: 10px;
   color: #fff;

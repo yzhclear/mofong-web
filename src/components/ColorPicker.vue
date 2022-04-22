@@ -41,7 +41,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .mofong-color-picker {
   display: flex;
 }

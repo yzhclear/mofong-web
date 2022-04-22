@@ -1,4 +1,4 @@
-import { Avatar, Button, Spin, Modal, Drawer, Card, Tag, Layout, Tabs, Menu, Row, Col, Form, Dropdown, Input, InputNumber, Slider, Radio, Select, InputSearch } from 'ant-design-vue';
+import { Avatar, Button, Spin, Modal, Drawer, Card, Tag, Layout, Tabs, Menu, Row, Col, Form, Dropdown, Input, InputNumber, Slider, Radio, Select, InputSearch, Empty, Tooltip } from 'ant-design-vue';
 import { App } from 'vue';
 
 const components = [
@@ -34,6 +34,8 @@ const components = [
   Select,
   Select.Option,
   InputSearch,
+  Empty,
+  Tooltip,
 ];
 
 const install = (app: App) => {

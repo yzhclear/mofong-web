@@ -82,7 +82,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .prop-item {
   display: flex;
   margin-bottom: 10px;

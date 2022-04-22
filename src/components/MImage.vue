@@ -22,7 +22,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style>
 .m-image-component {
   position: relative !important;
 }

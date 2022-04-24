@@ -52,13 +52,14 @@ export default defineComponent({
   components: { PropTable },
   emits: ['change'],
   setup(props, context) {
+    console.log('props', props);
     const currentKey = ref('item-0');
     const newGroups = computed(() => {
       const allNormalProps = props.groups.reduce((prev, current) => {
         return [...prev, ...current.items];
       }, [] as string[]);
 
-      // tag 不能编辑，把它过滤掉
+      // tag 不能编辑，过滤掉
       allNormalProps.push('tag');
       allNormalProps.push('right');
       allNormalProps.push('position');

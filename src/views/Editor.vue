@@ -22,7 +22,7 @@
             <h4>{{ page.title }}</h4>
           </input-edit>
         </div>
-        <a-menu :selectable="false" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
+        <!-- <a-menu :selectable="false" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
           <a-menu-item key="1">
             <a-button type="primary" @click="preview">预览和设置</a-button>
           </a-menu-item>
@@ -35,7 +35,15 @@
           <a-menu-item key="4">
             <user-profile :user="user"></user-profile>
           </a-menu-item>
-        </a-menu>
+        </a-menu> -->
+        <div class="editor-operation">
+          <a-button type="primary" @click="preview">预览和设置</a-button>
+          <a-button type="primary" @click="saveWork">保存</a-button>
+          <a-button type="primary" @click="publishWork" :loading="isPublishing">发布</a-button>
+          <div>
+            <user-profile :user="user" :smMode="true"></user-profile>
+          </div>
+        </div>
       </a-layout-header>
     </a-layout>
     <a-layout>
@@ -340,5 +348,12 @@ export default defineComponent({
 .preview-list.canvas-fix {
   position: absolute;
   max-height: none;
+}
+.editor-operation {
+  display: flex;
+  align-items: center;
+}
+.editor-operation > * {
+  margin-left: 20px;
 }
 </style>

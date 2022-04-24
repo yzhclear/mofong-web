@@ -423,6 +423,10 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     },
     saveWork(state) {
       state.isDirty = false;
+      state.page.updatedAt = new Date().toISOString();
+    },
+    copyWork(state) {
+      state.page.updatedAt = new Date().toISOString();
     },
     publishWork(state) {
       console.log('发布作品成功');
@@ -466,6 +470,9 @@ const editor: Module<EditorDataProps, GlobalDataProps> = {
     },
     fetchPublishWork({ commit }, id) {
       return asyncAndCommit(`/works/publish/${id}`, 'publishWork', commit, { method: 'post' });
+    },
+    copyWork({ commit }, id) {
+      return asyncAndCommit(`/works/copy/${id}`, 'copyWork', commit, { method: 'post' });
     },
     fetchChannels({ commit }, id) {
       return asyncAndCommit(`/channel/getWorkChannels/${id}`, 'getChannels', commit);

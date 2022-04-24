@@ -14,7 +14,7 @@
         <a-form :model="form" :rules="rules" ref="loginForm" layout="vertical">
           <h2>欢迎回来</h2>
           <p class="subTitle">使用手机号码和验证码登录到魔方</p>
-          <a-form-item label="手机号码" required name="username" validateFirst="true">
+          <a-form-item label="手机号码" required name="username" :validateFirst="true">
             <a-input size="large" v-model:value="form.username" placeholder="手机号码">
               <template v-slot:prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
             </a-input>

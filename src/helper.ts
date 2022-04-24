@@ -160,35 +160,35 @@ export const copyToClipboard = (text: string) => {
   }
 };
 
-export const downloadFile = (src: string, fileName: string) => {
-  const link = document.createElement('a');
-  link.download = fileName;
-  link.rel = 'noopener';
+// export const downloadFile = (src: string, fileName: string) => {
+//   const link = document.createElement('a');
+//   link.download = fileName;
+//   link.rel = 'noopener';
 
-  // 跨域资源, 使用axios请求
-  if (link.origin !== location.origin) {
-    axios
-      .get(src, { responseType: 'blob' })
-      .then((data) => {
-        link.href = URL.createObjectURL(data);
-        setTimeout(() => {
-          link.dispatchEvent(new MouseEvent('click'));
-        });
-        setTimeout(() => {
-          URL.revokeObjectURL(link.href);
-        }, 10000);
-      })
-      .catch((e) => {
-        console.error(e);
-        link.target = '_blank';
-        link.href = src;
-        link.dispatchEvent(new MouseEvent('click'));
-      });
-  } else {
-    link.href = src;
-    link.dispatchEvent(new MouseEvent('click'));
-  }
-};
+//   // 跨域资源, 使用axios请求
+//   if (link.origin !== location.origin) {
+//     axios
+//       .get(src, { responseType: 'blob' })
+//       .then((data) => {
+//         link.href = URL.createObjectURL(data);
+//         setTimeout(() => {
+//           link.dispatchEvent(new MouseEvent('click'));
+//         });
+//         setTimeout(() => {
+//           URL.revokeObjectURL(link.href);
+//         }, 10000);
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//         link.target = '_blank';
+//         link.href = src;
+//         link.dispatchEvent(new MouseEvent('click'));
+//       });
+//   } else {
+//     link.href = src;
+//     link.dispatchEvent(new MouseEvent('click'));
+//   }
+// };
 export const downloadImage = (url: string) => {
   const fileName = url.substring(url.lastIndexOf('/') + 1);
   saveAs(url, fileName);

@@ -2,7 +2,7 @@
   <div class="props-table">
     <div v-for="(value, key) in finalProps" :key="key" class="prop-item" :class="{ 'no-text': !value.text }">
       <span class="label" v-if="value.text">{{ value.text }}</span>
-      <div class="prop-component">
+      <div :class="`prop-component component-${value.component}`">
         <component :is="value.component" :[value.valueProp]="value.value" v-bind="value.extraProps" v-on="value.events">
           <template v-if="value.options">
             <component :is="value.subComponent" v-for="(option, k) in value.options" :key="k" :value="option.value">
@@ -18,7 +18,7 @@
 <script lang="ts">
 import { VNode } from 'vue';
 import { reduce } from 'lodash-es';
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { TextComponentProps } from '../defaultProps';
 import { mapPropsToForms } from '../propsMap';
 import RenderVnode from './RenderVnode';
@@ -88,14 +88,39 @@ export default defineComponent({
   margin-bottom: 10px;
   align-items: center;
 }
+.hide-item {
+  display: none;
+}
 .label {
   width: 28%;
-}
-.prop-component {
-  width: 70%;
 }
 .prop-item.no-text {
   display: inline-block;
   margin: 0 10px 0 0;
+}
+#item-fontWeight {
+  margin-left: 28%;
+}
+.prop-component {
+  width: 70%;
+}
+/* .component-a-slider {
+  width: 80%;
+} */
+.component-a-select .ant-select {
+  width: 150px;
+}
+.prop-component.component-shadow-picker,
+.prop-component.component-image-processer,
+.prop-component.component-background-processer {
+  width: 100%;
+}
+#item-backgroundImage {
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+#item-backgroundImage .styled-upload-component .uploader-container {
+  min-height: 200px;
 }
 </style>

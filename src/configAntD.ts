@@ -23,6 +23,10 @@ import {
   InputSearch,
   Tooltip,
   Empty,
+  Skeleton,
+  RangePicker,
+  Table,
+  Pagination,
 } from 'ant-design-vue';
 import { App } from 'vue';
 
@@ -62,7 +66,11 @@ const components = [
   Tooltip,
   Collapse,
   CollapsePanel,
+  Skeleton,
   Empty,
+  RangePicker,
+  Table,
+  Pagination,
 ];
 
 const install = (app: App) => {

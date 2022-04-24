@@ -5,6 +5,7 @@ import Home from '../views/Home.vue';
 import Index from '../views/Index.vue';
 import store from '../store/index';
 import TemplateDetail from '../views/TemplateDetail.vue';
+import MyWork from '../views/MyWork.vue';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -22,6 +23,7 @@ const router = createRouter({
             title: '欢迎来到魔方',
           },
         },
+        { path: 'mywork', name: 'MyWork', component: MyWork, meta: { requiredLogin: true, title: '我的设计列表' } },
         {
           path: '/template/:id',
           name: 'Template',

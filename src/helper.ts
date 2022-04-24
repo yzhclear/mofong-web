@@ -43,7 +43,7 @@ const beforeUploadCheck = (file: File, condition: CheckCondition) => {
   };
 };
 
-const commonUploadCheck = (file: File) => {
+export const commonUploadCheck = (file: File) => {
   const result = beforeUploadCheck(file, { format: ['image/jpeg', 'image/png'], size: 1 });
   const { passed, error } = result;
   if (error === 'format') {
@@ -194,4 +194,25 @@ export const downloadImage = (url: string) => {
   saveAs(url, fileName);
 };
 
-export { commonUploadCheck };
+export const toDateFormat = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
+
+export const toDateFromDays = (date: Date, n: number) => {
+  const newDate = new Date(date.getTime());
+  newDate.setDate(date.getDate() + n);
+  return newDate;
+};
+
+export const getDaysArray = (start: Date, end: Date) => {
+  const arr = [];
+  // eslint-disable-next-line no-unmodified-loop-condition
+  for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+    arr.push(new Date(dt));
+  }
+  return arr;
+};
+
+export const objToArr = <T>(obj: { [key: string]: T }) => {
+  return Object.keys(obj).map((k) => obj[k]);
+};

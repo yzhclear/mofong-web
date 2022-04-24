@@ -14,7 +14,7 @@
       <a-layout-content class="home-layout">
         <router-view></router-view>
       </a-layout-content>
-      <a-layout-footer> ©️ 魔方(mofong.com) 版权所有 | 皖ICP备2022004858号 </a-layout-footer>
+      <a-layout-footer :style="{ textAlign: 'center' }"> ©️ 魔方(mofong.com) 版权所有 | 皖ICP备2022004858号 </a-layout-footer>
     </a-layout>
   </div>
 </template>

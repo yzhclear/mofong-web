@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { Module } from 'vuex';
 import store, { GlobalDataProps, asyncAndCommit } from './index';
 import { PageData } from './editor';
 import { RespData, RespListData } from './respTypes';
 import { objToQueryString } from '../helper';
+import { baseStaticURL } from '@/main';
 
 export type WorkProp = Required<Omit<PageData, 'props' | 'setting'>> & {
   barcodeUrl?: string; // 二维码
@@ -49,6 +49,9 @@ const workModule: Module<WorksProp, GlobalDataProps> = {
     getTemplate(state, { data }) {
       state.templates = [data];
     },
+    deleteWork(state, { extraData }) {
+      state.works = state.works.filter((work) => work.id !== extraData.id);
+    },
     getWorks(state, { data, extraData }) {
       const { searchText } = extraData;
       const { list, count } = data.data;
@@ -56,6 +59,14 @@ const workModule: Module<WorksProp, GlobalDataProps> = {
       state.works = list;
       state.totalWorks = count;
       state.searchText = searchText || '';
+    },
+    transferWork(state, { data, extraData }) {
+      if (data.errno === 0) {
+        state.works = state.works.filter((work) => work.id !== extraData.id);
+      }
+    },
+    clearStatic(state) {
+      state.statics = [];
     },
   },
   actions: {
@@ -75,6 +86,17 @@ const workModule: Module<WorksProp, GlobalDataProps> = {
       }
       const queryString = objToQueryString(queryObj);
       return asyncAndCommit(`/works?${queryString}`, 'getWorks', commit, { method: 'get' }, { pageIndex: queryObj.pageIndex, searchText: queryObj.title });
+    },
+    deleteWork({ commit }, id) {
+      return asyncAndCommit(`/works/${id}`, 'deleteWork', commit, { method: 'delete' }, { id });
+    },
+    fetchStatic({ commit }, queryObj) {
+      const newObj = { category: 'h5', action: 'pv', ...queryObj };
+      const queryString = objToQueryString(newObj);
+      return asyncAndCommit(`${baseStaticURL}/api/event?${queryString}`, 'fetchStatic', commit, { method: 'get' }, { name: queryObj.name, id: queryObj.label });
+    },
+    transferWork({ commit }, { id, username }) {
+      return asyncAndCommit(`/works/transfer/${id}/${username}`, 'transferWork', commit, { method: 'post' }, { id });
     },
   },
   getters: {

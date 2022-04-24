@@ -49,6 +49,9 @@ const workModule: Module<WorksProp, GlobalDataProps> = {
     getTemplate(state, { data }) {
       state.templates = [data];
     },
+    createWork(state, { data }) {
+      state.works.unshift(data);
+    },
     deleteWork(state, { extraData }) {
       state.works = state.works.filter((work) => work.id !== extraData.id);
     },
@@ -86,6 +89,9 @@ const workModule: Module<WorksProp, GlobalDataProps> = {
       }
       const queryString = objToQueryString(queryObj);
       return asyncAndCommit(`/works?${queryString}`, 'getWorks', commit, { method: 'get' }, { pageIndex: queryObj.pageIndex, searchText: queryObj.title });
+    },
+    createWork({ commit }, payload: WorkProp) {
+      return asyncAndCommit('/works', 'createWork', commit, { method: 'post', data: payload });
     },
     deleteWork({ commit }, id) {
       return asyncAndCommit(`/works/${id}`, 'deleteWork', commit, { method: 'delete' }, { id });

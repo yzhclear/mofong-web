@@ -6,6 +6,7 @@ import Index from '../views/Index.vue';
 import store from '../store/index';
 import TemplateDetail from '../views/TemplateDetail.vue';
 import MyWork from '../views/MyWork.vue';
+import Setting from '../views/Setting.vue';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -32,6 +33,7 @@ const router = createRouter({
             title: '模板详情',
           },
         },
+        { path: 'setting', name: 'Setting', component: Setting, meta: { requiredLogin: true, title: '我的信息' } },
       ],
     },
     {

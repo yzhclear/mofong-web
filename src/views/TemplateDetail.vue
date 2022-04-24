@@ -19,7 +19,7 @@
         </div>
         <div class="use-button">
           <a-button type="primary" size="large" @click="onCopy(template.id)" :loading="isCreating">
-            {{ isCreating ? '创建中...' : '使用模版' }}
+            {{ isCreating ? '创建中...' : '使用模板' }}
           </a-button>
           <a-button size="large" @click="download">下载图片海报</a-button>
         </div>

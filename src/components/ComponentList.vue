@@ -136,6 +136,12 @@ export default defineComponent({
 </script>
 
 <style>
+.sidebar-container {
+  padding: 20px;
+}
+.create-component-list .ant-tabs-tab {
+  padding: 12px;
+}
 .component-wrapper {
   width: 100px;
   position: relative;

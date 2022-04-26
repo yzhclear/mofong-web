@@ -40,6 +40,7 @@ module.exports = {
 
     const iconPath = path.resolve(__dirname, './src/icons.ts');
     config.resolve.alias['@ant-design/icons-vue/es$'] = iconPath;
+    config.resolve.alias['vue'] = path.resolve(`./node_modules/vue`);
 
     config.optimization.splitChunks = {
       maxInitialRequests: Infinity,

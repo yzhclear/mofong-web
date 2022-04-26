@@ -1,12 +1,14 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import Antd from './configAntD';
+import Mofong from 'mofong-components';
 import router from './routes';
 import store, { ICustomAxiosConfig } from './store';
 import axios from 'axios';
 
 import 'ant-design-vue/dist/antd.less';
 import 'cropperjs/dist/cropper.css';
+import 'mofong-components/dist/mofong.css';
 
 let baseBackendURL = '';
 let baseH5URL = '';
@@ -15,13 +17,13 @@ let baseStaticURL = '';
 if (process.env.NODE_ENV === 'development' || process.env.VUE_APP_IS_STAGING) {
   // 这里是本地的请求 URL
   // staging 也就是测试环境 URL
-  // baseBackendURL = 'http://120.24.245.140:8089';
-  // baseH5URL = 'http://120.24.245.140:8088';
-  // baseStaticURL = 'https://120.24.245.140:8087';
+  baseBackendURL = 'http://120.24.245.140:8089';
+  baseH5URL = 'http://120.24.245.140:8088';
+  baseStaticURL = 'https://120.24.245.140:8087';
   // 本地环境
-  baseBackendURL = 'http://localhost:3000';
-  baseH5URL = 'http://localhost:3001';
-  baseStaticURL = 'https://localhost:3002';
+  // baseBackendURL = 'http://localhost:3000';
+  // baseH5URL = 'http://localhost:3001';
+  // baseStaticURL = 'https://localhost:3002';
 } else {
   // 生产环境 URL
   baseBackendURL = 'https://api.mofong.cc';
@@ -58,5 +60,5 @@ axios.interceptors.response.use(
 );
 
 const app = createApp(App);
-app.use(Antd).use(router).use(store);
+app.use(router).use(store).use(Antd).use(Mofong);
 app.mount('#app');

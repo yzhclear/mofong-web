@@ -112,9 +112,6 @@ import { pickBy } from 'lodash-es';
 import initHotKeys from '../plugins/hotKey';
 import initContextMenu from '../plugins/contextMenu';
 import HistoryArea from './HistoryArea.vue';
-import MText from '../components/MText.vue';
-import MImage from '../components/MImage.vue';
-import MShape from '../components/MShape.vue';
 import ComponentList from '../components/ComponentList.vue';
 import LayerList from '../components/LayerList.vue';
 import EditorWrapper from '../components/EditorWrapper.vue';
@@ -133,7 +130,7 @@ export type TabType = 'component' | 'layer' | 'page';
 
 export default defineComponent({
   name: 'editor',
-  components: { MText, MImage, MShape, ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile, PublishForm, PreviewForm },
+  components: { ComponentList, EditorWrapper, PropsTable, LayerList, EditGroup, HistoryArea, InputEdit, UserProfile, PublishForm, PreviewForm },
   setup() {
     // 初始化快捷键
     initHotKeys();

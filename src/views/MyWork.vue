@@ -256,7 +256,7 @@ export default defineComponent({
 <style>
 .mywork-container {
   margin: 100px auto 0 auto;
-  width: 60%;
+  width: 100%;
 }
 .mywork-container .ant-input-search {
   width: 30%;

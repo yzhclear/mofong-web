@@ -21,7 +21,7 @@ const router = createRouter({
           name: 'Home',
           component: Home,
           meta: {
-            title: '欢迎来到魔方',
+            title: '欢迎来到魔方鱼',
           },
         },
         { path: 'mywork', name: 'MyWork', component: MyWork, meta: { requiredLogin: true, title: '我的设计列表' } },
@@ -42,7 +42,7 @@ const router = createRouter({
       component: () => import(/* webpackChunkName: "editor" */ '../views/Editor.vue'),
       meta: {
         requireLogin: true,
-        title: '编辑设计',
+        title: '我的编辑设计',
       },
     },
     {
@@ -72,7 +72,7 @@ router.beforeEach(async (to, from) => {
 
       try {
         await store.dispatch('fetchUserInfo');
-        if (redirectAlreadyLogin) return '/';
+        if (redirectAlreadyLogin) return '/home';
       } catch {
         message.error('登录状态已过期, 请重新登录', 2);
         store.commit('logout');
@@ -82,7 +82,7 @@ router.beforeEach(async (to, from) => {
       if (requireLogin) return '/login';
     }
   } else {
-    if (redirectAlreadyLogin) return '/';
+    if (redirectAlreadyLogin) return '/home';
   }
 });
 

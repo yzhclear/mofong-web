@@ -41,14 +41,13 @@ export default defineComponent({
     const router = useRouter();
     const createDesign = useCreateDesign();
     const handleClickLogin = () => {
-      store.commit('login');
-      message.success('登录成功', 2);
+      router.push('/login');
     };
     const handleClickLogout = () => {
       store.commit('logout');
       message.success('退出登录成功, 2秒后跳到首页', 2);
       setTimeout(() => {
-        router.push('/');
+        router.push('/home');
       }, 2000);
     };
     return {

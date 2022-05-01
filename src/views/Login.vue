@@ -114,7 +114,7 @@ export default defineComponent({
         store.dispatch('fetchLoginAndGetUserInfo', payload).then((rawData) => {
           message.success('登录成功 2秒后跳转首页');
           setTimeout(() => {
-            router.push('/');
+            router.push('/home');
           }, 2000);
         });
       });
@@ -216,5 +216,8 @@ export default defineComponent({
 .login-area .ant-input-affix-wrapper {
   padding: 0;
   border-radius: 20px;
+}
+.login-area .ant-input-suffix {
+  margin-left: 0;
 }
 </style>

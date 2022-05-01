@@ -163,7 +163,7 @@ export default defineComponent({
       // 自动保存
       timer = setInterval(() => {
         if (isDirty.value) {
-          // saveWork();
+          saveWork();
         }
       }, 1000 * 30);
     });

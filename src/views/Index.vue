@@ -1,5 +1,6 @@
 <template>
   <div class="indexpage-container">
+    <a-spin tip="读取中" class="editor-spinner" v-if="loading"> </a-spin>
     <a-layout :style="{ background: '#fff' }">
       <a-layout-header class="header" :class="{ 'transparent-header': isHomePage }">
         <div class="page-title">
@@ -11,8 +12,15 @@
           <user-profile :user="userInfo"></user-profile>
         </div>
       </a-layout-header>
-      <a-layout-content class="home-layout">
+      <a-layout-content v-if="isHomePage" class="home-layout">
         <router-view></router-view>
+      </a-layout-content>
+      <a-layout-content style="padding: 0 50px" v-else>
+        <a-layout style="padding: 24px 0; background: #fff">
+          <a-layout-content :style="{ padding: '0 24px', minHeight: '85vh', maxWidth: '1200px', margin: '0 auto', width: '100%' }">
+            <router-view></router-view>
+          </a-layout-content>
+        </a-layout>
       </a-layout-content>
       <a-layout-footer :style="{ textAlign: 'center' }"> ©️ 魔方(mofong.com) 版权所有 | 皖ICP备2022004858号 </a-layout-footer>
     </a-layout>
@@ -24,6 +32,7 @@ import { computed, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import UserProfile from '../components/UserProfile.vue';
+import showError from '../hooks/useShowError';
 
 export default defineComponent({
   name: 'Index',
@@ -33,12 +42,17 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const route = useRoute();
+    const loading = computed(() => store.state.status.loading);
     const userInfo = computed(() => store.state.user);
     const isHomePage = computed(() => route.name === 'Home');
+
+    // 提示报错信息
+    showError();
 
     return {
       userInfo,
       isHomePage,
+      loading,
     };
   },
 });

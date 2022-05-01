@@ -2,7 +2,7 @@
   <div class="styled-upload-component">
     <uploader
       class="styled-uploader"
-      action="http://localhost:3000/api/utils/upload-img"
+      :action="uploadUrl"
       :beforeUpload="commonUploadCheck"
       @file-uploaded="
         (data) => {
@@ -34,6 +34,7 @@ import { defineComponent } from 'vue';
 import { FileImageOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 import Uploader from './Uploader.vue';
 import { commonUploadCheck } from '../helper';
+import { baseBackendURL } from '@/main';
 
 export default defineComponent({
   components: {
@@ -52,11 +53,13 @@ export default defineComponent({
   },
   emits: ['success'],
   setup(props, context) {
+    const uploadUrl = `${baseBackendURL}/api/utils/upload-img`;
     const handleUploadSuccess = (data: any) => {
-      context.emit('success', { url: 'http://mofong.oss-cn-hangzhou.aliyuncs.com/upload-files/file-404525' });
-      // context.emit('success', { url: data.urls[0] });
+      // context.emit('success', { url: 'http://mofong.oss-cn-hangzhou.aliyuncs.com/upload-files/file-404525' });
+      context.emit('success', { url: data.urls[0] });
     };
     return {
+      uploadUrl,
       commonUploadCheck,
       handleUploadSuccess,
     };
